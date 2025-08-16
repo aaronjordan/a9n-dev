@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from "astro:content";
+import Column from "../../layouts/Column.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("snippets");
+  return posts.map((p) => ({ params: { id: p.id }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Column routeTitle="Snippet">
+  <h1>{post.data.title}</h1>
+  <Content />
+</Column>

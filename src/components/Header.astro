@@ -1,0 +1,26 @@
+---
+const routes = [
+  { to: "/about", label: "about" },
+  { to: "/notebook", label: "notebook" },
+  { to: "/snippets", label: "snippets" },
+];
+---
+
+<header class="content-lane">
+  <nav>
+    <ul>
+      <li>
+        <strong><a href="/">@a11n.dev</a></strong>
+      </li>
+    </ul>
+    <ul>
+      {
+        routes.map((r) => (
+          <li>
+            <a href={r.to}>{r.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

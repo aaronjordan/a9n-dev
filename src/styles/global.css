@@ -1,0 +1,41 @@
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "./pico.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@layer base {
+  body {
+    /* move to tailwind theme i think? */
+    --min-gutter: 36px;
+  }
+
+  .content-lane {
+    display: grid;
+    width: 100%;
+    grid-template-columns:
+      [full-start] 1fr
+      [margin-start] var(--min-gutter)
+      [lane-start] min(60ch, calc(100% - 2 * var(--min-gutter)))
+      [lane-end] var(--min-gutter)
+      [margin-end] 1fr
+      [full-end];
+    align-content: start;
+    position: relative;
+  }
+
+  .content-lane::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    inset: 0;
+    grid-column: margin-start / margin-end;
+    box-shadow: 1px 0 0 0 #055, -1px 0 0 0 #055;
+    box-sizing: content-box;
+    z-index: -1;
+  }
+
+  .content-lane > * {
+    grid-column: lane-start / lane-end;
+  }
+}

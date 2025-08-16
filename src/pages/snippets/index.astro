@@ -1,0 +1,12 @@
+---
+import Column from "../../layouts/Column.astro";
+import PostIndex from "../../components/PostIndex.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("snippets");
+---
+
+<Column routeTitle="Notebook">
+  <h1>Snippets</h1>
+  <PostIndex {posts} />
+</Column>

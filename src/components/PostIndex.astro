@@ -1,0 +1,22 @@
+---
+interface Props {
+  posts: {
+    id: string;
+    data: {
+      title: string;
+    };
+  }[];
+}
+
+console.log(Astro.routePattern);
+---
+
+<ul>
+  {
+    Astro.props.posts.map((post) => (
+      <li>
+        <a href={`${Astro.routePattern}/${post.id}`}>{post.data.title}</a>
+      </li>
+    ))
+  }
+</ul>

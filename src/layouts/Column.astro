@@ -1,0 +1,14 @@
+---
+import Base from "./Base.astro";
+
+interface Props {
+  pageTitle?: string;
+  routeTitle: string;
+}
+---
+
+<Base {...Astro.props}>
+  <main class="content-lane flex-grow">
+    <slot />
+  </main>
+</Base>
