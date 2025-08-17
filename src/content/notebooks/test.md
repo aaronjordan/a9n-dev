@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/Content.astro
 title: First
 ---
 

@@ -6,11 +6,11 @@ const Post = z.object({
 });
 
 const notebooks = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "src/content/notebooks" }),
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/notebooks" }),
   schema: Post,
 });
 const snippets = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "src/content/snippets" }),
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/snippets" }),
   schema: Post,
 });
 

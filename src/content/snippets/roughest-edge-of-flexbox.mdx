@@ -1,8 +1,9 @@
 ---
-layout: ../../layouts/Content.astro
 title: The roughest edge of flexbox?
 pubDate: 2025-08-08
 ---
+
+import CodeGroup from "../../components/CodeGroup.astro";
 
 Like every other sane developer who's worked on the web in the last ten years, I **love** flexbox. It's so much more convenient to work with and easy to reason about than [twelve columns](https://getbootstrap.com/docs/3.3/css/#grid-example-basic) or anything else I've run into with blocks. A quick `display: flex` (or, with Tailwind, just `flex`) unlocks so many superpowers... These are the first to come to mind:
 
@@ -18,6 +19,9 @@ Of course, we can even flip the container around, running the main axis of the f
 
 In this example, there's a toggle to disable text wrapping in the inner boxes. The container is a simple grid layout with named areas and the elements in each have a `max-width` of 100%, so they are permitted to fill all of the _available_ horizontal space. Add some text to the code block and note the effect on the elements in the flex container.
 
+<CodeGroup files={["first.css", "second.js"]}>
+<Fragment slot="0">
+
 ```css
 .my-class {
   display: grid;
@@ -25,6 +29,23 @@ In this example, there's a toggle to disable text wrapping in the inner boxes. T
   margin: auto;
 }
 ```
+
+</Fragment>
+<Fragment slot="1">
+
+```js
+import * as React from "react";
+
+function hello() {
+  // greet the user
+  console.log("hello world");
+}
+
+hello();
+```
+
+</Fragment>
+</CodeGroup>
 
 _Did you expect that?_
 

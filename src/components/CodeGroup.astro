@@ -1,0 +1,153 @@
+---
+interface Props {
+  files: string[];
+}
+
+/**
+ * Peeks at Astro slots to see if all these [files] exist, throwing if any
+ * are missing from the set or if there are too many slots provided.
+ */
+function assertFileSlotsExist(files: string[]) {
+  const missing = [];
+  for (let i = 0; i < files.length; i++) {
+    if (!Astro.slots.has(String(i))) missing.push(i);
+  }
+
+  const ok = missing.length === 0;
+  if (!ok) {
+    const missingNames = missing.map((i) => files[i]);
+    throw Error(
+      `Missing file slots at: ${missing.join(", ")}\n  maybe: ${missingNames}`
+    );
+  }
+
+  if (Astro.slots.has(String(files.length))) {
+    throw Error(
+      `Too many file slots ${files.length} on group starting with "${files[0]}"`
+    );
+  }
+}
+
+const files = Astro.props.files;
+assertFileSlotsExist(files);
+---
+
+<style>
+  .tab-vfile {
+    --pico-background-color: #1F1F28;
+    
+    width: auto;
+    border-radius: 0;
+    border: none;
+    height: 2rem;
+    margin:0;
+    padding: 0 0.75rem; 
+    display: inline-flex;
+  }
+  .tab-vfile:checked {
+    --pico-background-color: #E6C384;
+    color: #1F1F28;
+  }
+  .tab-vfile:first-of-type {
+    border-top-left-radius: var(--pico-border-radius);
+
+  }
+  .tab-vfile:last-of-type {
+    border-top-right-radius: var(--pico-border-radius);
+  }
+
+  .tab-vfile::after {
+    content: attr(data-vfile-name);
+    display: block;
+    margin: auto;
+  }
+
+  .slot-vfile {
+    border-top: 2px solid #E6C384; 
+    display: none;
+  }
+
+  /* look mom, no javascript */
+  .tab-vfile-0:checked ~ .slot-vfile-0,
+  .tab-vfile-1:checked ~ .slot-vfile-1,
+  .tab-vfile-2:checked ~ .slot-vfile-2,
+  .tab-vfile-3:checked ~ .slot-vfile-3,
+  .tab-vfile-4:checked ~ .slot-vfile-4,
+  .tab-vfile-5:checked ~ .slot-vfile-5,
+  .tab-vfile-6:checked ~ .slot-vfile-6,
+  .tab-vfile-7:checked ~ .slot-vfile-7 {
+    display: block;
+  }
+</style>
+
+<div>
+  {
+    files.map((name, index) => (
+      <>
+        <input
+          name={`tabs-with-${files[0]}`}
+          type="radio"
+          checked={index === 0}
+          aria-label={`show ${name} below`}
+          class={`tab-vfile tab-vfile-${index}`}
+          data-vfile-name={name}
+        />
+        <label class="sr-only" for={`tab-vfile tab-vfile-${index}`}>{name}</label>
+      </>
+    ))
+  }
+
+  <!-- This is a little dumb but slots in Astro must be static strings. -->
+  <div class="slot-vfile slot-vfile-0">
+    <slot name="0" />
+  </div>
+  {
+    files.length > 1 ? (
+      <div class="slot-vfile slot-vfile-1">
+        <slot name="1" />
+      </div>
+    ) : null
+  }
+  {
+    files.length > 2 ? (
+      <div class="slot-vfile slot-vfile-2">
+        <slot name="2" />
+      </div>
+    ) : null
+  }
+  {
+    files.length > 3 ? (
+      <div class="slot-vfile slot-vfile-3">
+        <slot name="3" />
+      </div>
+    ) : null
+  }
+  {
+    files.length > 4 ? (
+      <div class="slot-vfile slot-vfile-4">
+        <slot name="4" />
+      </div>
+    ) : null
+  }
+  {
+    files.length > 5 ? (
+      <div class="slot-vfile slot-vfile-5">
+        <slot name="5" />
+      </div>
+    ) : null
+  }
+  {
+    files.length > 6 ? (
+      <div class="slot-vfile slot-vfile-6">
+        <slot name="6" />
+      </div>
+    ) : null
+  }
+  {
+    files.length > 7 ? (
+      <div class="slot-vfile slot-vfile-7">
+        <slot name="7" />
+      </div>
+    ) : null
+  }
+</div>
