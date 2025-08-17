@@ -4,10 +4,58 @@
 @import "./pico.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 
+@theme {
+  --font-sans: "Figtree Variable", sans-serif;
+  --font-mono: "Google Sans Code", monospace;
+}
+
 @layer base {
+  :root {
+    --pico-font-family-sans-serif: var(--font-sans);
+    --pico-font-family-monospace: var(--font-mono);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply cursor-default relative tracking-tight font-mono;
+    font-weight: 400;
+
+    &::before {
+      content: "#";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: -32px;
+      opacity: 0;
+    }
+
+    &:hover::before {
+      opacity: 0.5;
+    }
+  }
+
   body {
     /* move to tailwind theme i think? */
-    --min-gutter: 36px;
+    --min-gutter: 28px;
+  }
+
+  li,
+  p {
+    cursor: default;
+  }
+
+  pre {
+    overflow-x: auto;
+  }
+
+  pre > code {
+    width: max-content;
+    min-width: 100%;
+    padding-inline: 28px;
   }
 
   .content-lane {
@@ -16,7 +64,7 @@
     grid-template-columns:
       [full-start] 1fr
       [margin-start] var(--min-gutter)
-      [lane-start] min(60ch, calc(100% - 2 * var(--min-gutter)))
+      [lane-start] min(740px, calc(100% - 2 * var(--min-gutter)))
       [lane-end] var(--min-gutter)
       [margin-end] 1fr
       [full-end];
@@ -30,7 +78,8 @@
     height: 100%;
     inset: 0;
     grid-column: margin-start / margin-end;
-    box-shadow: 1px 0 0 0 #055, -1px 0 0 0 #055;
+    box-shadow: 1px 0 0 0 var(--color-zinc-800),
+      -1px 0 0 0 var(--color-zinc-800);
     box-sizing: content-box;
     z-index: -1;
   }
@@ -38,4 +87,12 @@
   .content-lane > * {
     grid-column: lane-start / lane-end;
   }
+}
+
+@utility content-margin {
+  grid-column: margin-start / margin-end;
+}
+
+@utility content-full {
+  grid-column: full-start / full-end;
 }

@@ -34,26 +34,26 @@ assertFileSlotsExist(files);
 
 <style>
   .tab-vfile {
-    --pico-background-color: #1F1F28;
-    
+    --pico-background-color: #1f1f28;
+
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
     width: auto;
     border-radius: 0;
+    border-top-left-radius: var(--pico-border-radius);
+    border-top-right-radius: var(--pico-border-radius);
     border: none;
     height: 2rem;
-    margin:0;
-    padding: 0 0.75rem; 
+    margin: 0;
+    padding: 0 0.75rem;
     display: inline-flex;
   }
   .tab-vfile:checked {
-    --pico-background-color: #E6C384;
-    color: #1F1F28;
+    --pico-background-color: #e6c384;
+    color: #1f1f28;
   }
   .tab-vfile:first-of-type {
-    border-top-left-radius: var(--pico-border-radius);
-
-  }
-  .tab-vfile:last-of-type {
-    border-top-right-radius: var(--pico-border-radius);
+    margin-left: 28px;
   }
 
   .tab-vfile::after {
@@ -63,7 +63,7 @@ assertFileSlotsExist(files);
   }
 
   .slot-vfile {
-    border-top: 2px solid #E6C384; 
+    border-top: 2px solid #e6c384;
     display: none;
   }
 
@@ -80,7 +80,20 @@ assertFileSlotsExist(files);
   }
 </style>
 
-<div>
+<style is:global>
+  .slot-vfile pre,
+  .slot-vfile code {
+    border-radius: 0;
+  }
+
+  .slot-vfile pre {
+    box-shadow:
+      0 6px 12px -12px #e6c384 inset,
+      0 -4px 10px -6px var(--pico-background-color) inset;
+  }
+</style>
+
+<div class="content-margin">
   {
     files.map((name, index) => (
       <>
@@ -92,7 +105,9 @@ assertFileSlotsExist(files);
           class={`tab-vfile tab-vfile-${index}`}
           data-vfile-name={name}
         />
-        <label class="sr-only" for={`tab-vfile tab-vfile-${index}`}>{name}</label>
+        <label class="sr-only" for={`tab-vfile tab-vfile-${index}`}>
+          {name}
+        </label>
       </>
     ))
   }

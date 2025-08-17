@@ -6,17 +6,27 @@ const routes = [
 ];
 ---
 
-<header class="content-lane">
-  <nav>
+<style>
+  .hero-roll {
+    background-image: linear-gradient(
+      90deg,
+      rgba(0, 255, 255, 0.15),
+      rgba(255, 0, 255, 0.15)
+    );
+  }
+</style>
+
+<header class="content-lane font-mono hero-roll">
+  <nav class="mt-4 pb-2 grid grid-cols-1 gap-0">
     <ul>
-      <li>
-        <strong><a href="/">@a11n.dev</a></strong>
+      <li class="py-0">
+        <strong><a class="py-0" href="/">@a11n.dev</a></strong>
       </li>
     </ul>
     <ul>
       {
         routes.map((r) => (
-          <li>
+          <li class="py-0">
             <a href={r.to}>{r.label}</a>
           </li>
         ))
