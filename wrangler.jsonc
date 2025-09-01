@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "a11n-astro",
+  "name": "a11n-dev",
   "compatibility_date": "2025-09-01",
   "assets": {
     "directory": "./dist"
