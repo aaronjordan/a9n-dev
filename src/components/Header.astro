@@ -8,18 +8,54 @@ const routes = [
 
 <style>
   .hero-roll {
+    position: relative;
+  }
+
+  .hero-roll::after {
+    content: " ";
+    position: absolute;
+    inset: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: content-box;
+    padding: 2.75rem;
+    border-radius: 100%;
+    box-shadow: var(--pico-background-color) 0 0 1.8rem 2.1rem inset;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
     background-image: linear-gradient(
       90deg,
-      rgba(0, 255, 255, 0.15),
-      rgba(255, 0, 255, 0.15)
+      rgba(126, 127, 91, 0.23),
+      rgba(41, 82, 110, 0.32),
+      rgba(130, 192, 175, 0.18),
+      rgba(126, 127, 91, 0.23),
+      rgba(41, 82, 110, 0.32)
     );
+    background-size: 400% 100%;
+    animation: hero-roll 8s linear infinite;
+    transition: opacity 1.6s ease-in-out;
+    opacity: 0;
+  }
+
+  .hero-roll:hover::after {
+    opacity: 1;
+  }
+
+  @keyframes hero-roll {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 0%;
+    }
   }
 </style>
 
-<header class="content-lane font-mono hero-roll">
+<header class="content-lane font-mono">
   <nav class="mt-4 pb-2 grid grid-cols-1 gap-0">
     <ul>
-      <li class="py-0">
+      <li class="py-0 hero-roll">
         <strong><a class="py-0" href="/">@a11n.dev</a></strong>
       </li>
     </ul>
