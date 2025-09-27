@@ -1,0 +1,25 @@
+{
+  "name": "dotdev",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.7",
+    "@astrojs/mdx": "^4.3.4",
+    "@fontsource-variable/figtree": "^5.2.8",
+    "@fontsource/google-sans-code": "^5.2.1",
+    "@repo/tailwind": "workspace:*",
+    "@tailwindcss/vite": "^4.1.12",
+    "astro": "^5.13.2",
+    "shiki": "^3.13.0",
+    "tailwindcss": "^4.1.12"
+  },
+  "devDependencies": {
+    "wrangler": "^4.33.1"
+  }
+}

@@ -1,29 +1,19 @@
 {
-  "name": "ajdev-astro",
+  "name": "ajdev",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "bun@1.2.22",
   "workspaces": [
     "apps/*",
+    "apps/sandbox/*",
     "packages/*"
   ],
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/cloudflare": "^12.6.7",
-    "@astrojs/mdx": "^4.3.4",
-    "@fontsource-variable/figtree": "^5.2.8",
-    "@fontsource/google-sans-code": "^5.2.1",
-    "@tailwindcss/vite": "^4.1.12",
-    "astro": "^5.13.2",
-    "shiki": "^3.13.0",
-    "tailwindcss": "^4.1.12"
+    "dev": "turbo dev",
+    "build": "turbo build"
   },
   "devDependencies": {
-    "wrangler": "^4.33.1"
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.8"
   }
 }

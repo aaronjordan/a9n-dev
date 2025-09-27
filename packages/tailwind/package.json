@@ -1,0 +1,7 @@
+{
+  "name": "@repo/tailwind",
+  "type": "module",
+  "exports": {
+    "./css": "./src/main.css"
+  }
+}

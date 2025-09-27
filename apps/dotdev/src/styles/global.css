@@ -4,6 +4,7 @@
 @import "./pico.css" layer(base);
 @import "./gruv.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "@repo/tailwind/css";
 
 @theme {
   --font-sans: "Figtree Variable", sans-serif;

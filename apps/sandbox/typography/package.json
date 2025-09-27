@@ -1,0 +1,14 @@
+{
+  "name": "sandbox-typography",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot --no-clear-screen run ./src/serve.ts"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
