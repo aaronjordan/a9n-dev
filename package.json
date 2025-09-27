@@ -2,6 +2,11 @@
   "name": "ajdev-astro",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "bun@1.2.22",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
