@@ -2,6 +2,7 @@
 
 @import "tailwindcss/theme.css" layer(theme);
 @import "./pico.css" layer(base);
+@import "./gruv.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @theme {
@@ -13,16 +14,6 @@
   :root {
     --pico-font-family-sans-serif: var(--font-sans);
     --pico-font-family-monospace: var(--font-mono);
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply cursor-default relative tracking-tight font-mono;
-    font-weight: 400;
   }
 
   h2,

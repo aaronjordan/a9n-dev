@@ -1,9 +1,9 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
-
-import cloudflare from "@astrojs/cloudflare";
+import { createCssVariablesTheme } from "shiki";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +11,11 @@ export default defineConfig({
 
   markdown: {
     shikiConfig: {
-      theme: "kanagawa-wave",
+      theme: createCssVariablesTheme({
+        name: "css-variables",
+        variablePrefix: "--code-",
+        fontStyle: true,
+      }),
       wrap: false,
     },
   },
