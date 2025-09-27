@@ -1,4 +1,5 @@
 import template from "./index.html" with { type: "text" };
+import { render } from "./render";
 
 export async function fetch(this: Bun.Server, request: Request) {
   const wss = this.upgrade(request);
@@ -12,7 +13,8 @@ export async function fetch(this: Bun.Server, request: Request) {
   }
 
   assertIsString(template);
-  return new Response(template, { headers: { "Content-Type": "text/html" } });
+  const page = await render(template, url);
+  return new Response(page, { headers: { "Content-Type": "text/html" } });
 }
 
 function assertIsString(x: unknown): asserts x is string {
