@@ -1,0 +1,26 @@
+@reference "tailwindcss";
+
+@theme {
+  --font-mono: "Google Sans Code";
+  --font-sans: "Figtree";
+
+  --color-content-high: var(--content-high);
+  --color-content: var(--content);
+  --color-content-low: var(--content-low);
+  --color-frame-high: var(--frame-high);
+  --color-frame: var(--frame);
+  --color-frame-low: var(--frame-low);
+  --color-surface-high: var(--surface-high);
+  --color-surface: var(--surface);
+  --color-surface-low: var(--surface-low);
+  --color-highlight: var(--highlight);
+
+  --color-blue: var(--blue);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-orange: var(--orange);
+  --color-red: var(--red);
+
+  --page-max-width: 740px;
+  --spacing-gutter: 30px;
+}

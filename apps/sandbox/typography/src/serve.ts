@@ -1,5 +1,6 @@
 import { watch } from "fs";
 import { fetch } from "./fetch";
+import { resolve } from "path";
 
 declare global {
   var sockets: Bun.ServerWebSocket<unknown>[];
@@ -35,3 +36,12 @@ function reloadPages() {
 reloadPages();
 watch(import.meta.dir + "/public", { recursive: true }, reloadPages);
 watch(import.meta.dir + "/routes", { recursive: true }, reloadPages);
+
+// Terrible, maybe we could
+//   1) build tailwind here importing the other pkg
+//   2) figure out why bun isn't following the symlink
+watch(
+  resolve(import.meta.dir, "../../../../packages/tailwind/dist"),
+  { recursive: true },
+  reloadPages
+);

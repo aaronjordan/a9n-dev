@@ -1,0 +1,73 @@
+h1 {
+  font-size: 1.5rem;
+  font-weight: 250;
+  letter-spacing: -0.033rem;
+  line-height: calc(2 / 1.66); /* TODO, check should change these? others ok */
+}
+h2 {
+  font-size: 1.33rem;
+  font-weight: 450;
+  letter-spacing: -0.0167rem;
+  line-height: calc(1.67 / 1.33);
+}
+h3 {
+  font-size: 1.167rem;
+  font-weight: 525;
+  line-height: 1.33;
+}
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+h4 {
+  font-size: 1.084rem;
+}
+h5 {
+  font-size: 1rem;
+}
+h6 {
+  font-size: 0.95rem;
+}
+
+hgroup > :last-child {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--content-low);
+}
+
+@media screen and (min-width: 800px) {
+  h1 {
+    font-size: 2rem;
+    line-height: calc(2 / 1.66);
+  }
+  h2 {
+    font-size: 1.66rem;
+    line-height: calc(1.67 / 1.33);
+  }
+  h3 {
+    font-size: 1.33rem;
+    font-weight: 525;
+    line-height: 1.33;
+  }
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+  }
+  h4 {
+    font-size: 1.167rem;
+  }
+  h5 {
+    font-size: 1rem;
+  }
+  h6 {
+    font-size: 0.9rem;
+  }
+
+  hgroup > :last-child {
+    font-size: 1.1rem;
+    font-style: italic;
+    opacity: 0.6; /* TODO: use real color */
+  }
+}

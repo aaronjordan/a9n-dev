@@ -1,0 +1,83 @@
+@utility lane {
+  & {
+    display: grid;
+    width: 100%;
+    grid-template-columns:
+      [page-start] 1fr
+      [margin-start] var(--spacing-gutter)
+      [lane-start] min(
+        var(--page-max-width),
+        calc(100% - 2 * var(--spacing-gutter))
+      )
+      [lane-end] var(--spacing-gutter)
+      [margin-end] 1fr
+      [page-end];
+    align-content: start;
+    position: relative;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    inset: 0;
+    grid-column: margin-start / margin-end;
+    box-shadow:
+      1px 0 0 0 var(--frame-low),
+      -1px 0 0 0 var(--frame-low);
+    box-sizing: content-box;
+    z-index: -1;
+  }
+
+  & > * {
+    grid-column: lane-start / lane-end;
+    margin-top: --spacing(6);
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  & > h1,
+  & > h2,
+  & > hgroup {
+    margin-top: --spacing(12);
+  }
+
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6 {
+    margin-top: --spacing(10);
+  }
+
+  & > p + p {
+    margin-top: --spacing(4);
+  }
+
+  & > pre {
+    grid-column: margin-start / margin-end;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  & > ul,
+  & > ol {
+    margin-top: --spacing(4);
+  }
+}
+
+@utility lane-inner {
+  grid-column: lane-start / lane-end;
+}
+
+@utility lane-full {
+  & {
+    grid-column: margin-start / margin-end;
+  }
+}
+
+@utility lane-bleed {
+  & {
+    grid-column: page-start / page-end;
+  }
+}
