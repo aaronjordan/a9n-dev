@@ -1,6 +1,6 @@
 ---
 const routes = [
-  { to: "/about", label: "about" },
+  { to: "/", label: "about" },
   { to: "/notebook", label: "notebook" },
   { to: "/snippets", label: "snippets" },
 ];
@@ -52,17 +52,19 @@ const routes = [
   }
 </style>
 
-<header class="content-lane font-mono">
-  <nav class="mt-4 pb-2 grid grid-cols-1 gap-0">
-    <ul>
-      <li class="py-0 hero-roll">
-        <strong><a class="py-0" href="/">@a11n.dev</a></strong>
+<header class="lane border-b border-frame font-mono">
+  <nav class="block pt-8 pb-4">
+    <ul class="text-xl">
+      <li>
+        <a class="text-content-low" href="/">
+          <span class="text-[1.325rem] font-medium font-sans">a9n</span>.dev
+        </a>
       </li>
     </ul>
-    <ul>
+    <ul class="flex gap-4">
       {
         routes.map((r) => (
-          <li class="py-0">
+          <li>
             <a href={r.to}>{r.label}</a>
           </li>
         ))

@@ -2,7 +2,17 @@ hr {
   color: var(--frame-low);
 }
 
-ul {
+main ul {
+  @apply list-disc;
+  margin-inline-start: --spacing(5);
+  margin-inline-end: --spacing(1);
+
+  & li {
+    padding-inline-start: --spacing(2);
+  }
+}
+
+ul.list-pointy {
   margin-inline: --spacing(1);
 
   & li {
@@ -12,7 +22,7 @@ ul {
   & li::before {
     content: "\27a4";
     display: inline-block;
-    transform: translateY(-2.1px);
+    transform: translateY(-1.9px);
     font-size: 0.65rem;
     width: 1.5rem;
     padding-inline-end: --spacing(2);
@@ -111,9 +121,21 @@ pre {
   padding-block: --spacing(4);
   color: var(--content-low);
   box-shadow:
-    0 1rem 1.75rem -1.5rem var(--frame-low) inset,
-    0 2.5rem 6.25rem -2.5rem var(--frame-low) inset,
-    0 -1rem 1.75rem -1.5rem var(--surface-high) inset,
-    0 -1.5rem 4.25rem -2.5rem var(--surface-high) inset;
+    0 1.25rem 4.25rem -0.75rem var(--surface-high) inset,
+    0 0.25rem 1.75rem -0.5rem var(--surface-high) inset;
   line-height: 1.5;
+}
+
+/* Apply some resets for header elements */
+header ul {
+  display: flex;
+  gap: --spacing(2);
+
+  & li {
+    margin: 0;
+  }
+
+  & a {
+    text-decoration: none;
+  }
 }

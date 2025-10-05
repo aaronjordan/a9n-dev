@@ -1,96 +1,42 @@
 @layer theme, base, components, utilities;
 
-@import "tailwindcss/theme.css" layer(theme);
-@import "./pico.css" layer(base);
-@import "./gruv.css" layer(base);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import "./gruv.css" layer(theme);
 @import "@repo/tailwind/css";
 
-@theme {
-  --font-sans: "Figtree Variable", sans-serif;
-  --font-mono: "Google Sans Code", monospace;
+/* gruv theme / dark */
+:root {
+  --content-low: var(--gb-light2);
+  --content: var(--gb-light1);
+  --content-high: var(--gb-light0);
+  --frame-high: var(--gb-dark4);
+  --frame: var(--gb-dark3);
+  --frame-low: var(--gb-dark2);
+  --surface-low: var(--gb-dark0);
+  --surface: color-mix(in srgb, var(--gb-dark0), var(--gb-dark1));
+  --surface-high: var(--gb-dark1);
+
+  --highlight: color-mix(in lch, var(--gb-faded-yellow) 40%, transparent);
+  --selection: color-mix(in lch, var(--gb-neutral-orange) 40%, transparent);
+
+  --blue: var(--gb-neutral-blue);
+  --green: var(--gb-neutral-green);
+  --yellow: var(--gb-neutral-yellow);
+  --orange: var(--gb-neutral-orange);
+  --red: var(--gb-neutral-red);
+  --purple: var(--gb-neutral-purple);
 }
 
-@layer base {
-  :root {
-    --pico-font-family-sans-serif: var(--font-sans);
-    --pico-font-family-monospace: var(--font-mono);
-  }
-
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    &::before {
-      content: "#";
-      display: block;
-      position: absolute;
-      top: 0;
-      left: -32px;
-      opacity: 0;
-    }
-
-    &:hover::before {
-      opacity: 0.5;
-    }
-  }
-
-  body {
-    /* move to tailwind theme i think? */
-    --min-gutter: 28px;
-  }
-
-  li,
-  p {
-    cursor: default;
-  }
-
-  pre {
-    overflow-x: auto;
-  }
-
-  pre > code {
-    width: max-content;
-    min-width: 100%;
-    padding-inline: 28px;
-  }
-
-  .content-lane {
-    display: grid;
-    width: 100%;
-    grid-template-columns:
-      [full-start] 1fr
-      [margin-start] var(--min-gutter)
-      [lane-start] min(740px, calc(100% - 2 * var(--min-gutter)))
-      [lane-end] var(--min-gutter)
-      [margin-end] 1fr
-      [full-end];
-    align-content: start;
-    position: relative;
-  }
-
-  .content-lane::after {
-    content: "";
-    position: absolute;
-    height: 100%;
-    inset: 0;
-    grid-column: margin-start / margin-end;
-    box-shadow: 1px 0 0 0 var(--color-zinc-800),
-      -1px 0 0 0 var(--color-zinc-800);
-    box-sizing: content-box;
-    z-index: -1;
-  }
-
-  .content-lane > * {
-    grid-column: lane-start / lane-end;
-  }
+body {
+  font-family: "Figtree";
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "ss01" 1;
 }
 
-@utility content-margin {
-  grid-column: margin-start / margin-end;
-}
-
-@utility content-full {
-  grid-column: full-start / full-end;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Google Sans Code";
 }

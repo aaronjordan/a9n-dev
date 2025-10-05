@@ -38,7 +38,7 @@ abbr,
 a {
   color: var(--yellow);
 
-  &:visited {
+  &:visited:not(header *) {
     color: var(--content-low);
     color: color-mix(in lch, var(--yellow), var(--content-low) 75%);
   }
@@ -49,6 +49,10 @@ a {
     color: color-mix(in lch, var(--yellow), var(--content-high));
   }
 }
+
+/* header a:visited {
+  color: var(--yellow);
+} */
 
 kbd {
   display: inline-block;

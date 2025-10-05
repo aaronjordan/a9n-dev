@@ -27,8 +27,13 @@ const title = [routeTitle, pageTitle, siteTitle].filter((x) => x).join(" - ");
     <title>{title}</title>
     <ClientRouter />
   </head>
-  <body class="flex flex-col overflow-y-auto h-full">
-    <!-- <Header transition:animate="fade" /> -->
+  <body>
+    <Header />
     <slot />
+    <footer class="lane py-4 border-t border-frame">
+      <span class="font-mono text-xs text-center text-frame-high">
+        made with <span class="icon-[ph--heart]"></span> in PDX
+      </span>
+    </footer>
   </body>
 </html>

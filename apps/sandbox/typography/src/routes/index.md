@@ -144,11 +144,11 @@ Hopefully none of this is surprising.
 
 Some items:
 
-- cheese
-- lettuce
-- tomato
-- onion
-- mayo
+- Cheese
+- Lettuce
+- Tomato
+- Onion
+- Mayo
 
 Other notes:
 
@@ -158,11 +158,11 @@ Other notes:
 
 #### Ordered Lists
 
-1. cheese
-1. lettuce
-1. tomato
-1. onion
-1. mayo
+1. Cheese
+1. Lettuce
+1. Tomato
+1. Onion
+1. Mayo
 1. Bread is a baked food product made from water, flour, and often yeast. It is a staple food across the world, particularly in Europe and the Middle East. Throughout recorded history and around the world, it has been an important part of many cultures' diets. It is one of the oldest human-made foods, having been of significance since the dawn of agriculture, and plays an essential role in both religious rituals and secular culture.
 
 ### Preformatted Text / Code Blocks
