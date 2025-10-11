@@ -71,7 +71,7 @@ kbd {
   color: var(--surface-low);
 }
 
-p > code:not(hgroup *) {
+code:not(hgroup *, pre *) {
   display: inline-block;
   background: var(--surface-high);
   border: 0.08rem solid var(--frame-low);

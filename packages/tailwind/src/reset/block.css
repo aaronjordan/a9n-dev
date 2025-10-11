@@ -2,30 +2,13 @@ hr {
   color: var(--frame-low);
 }
 
-main ul {
-  @apply list-disc;
+main ul:not(.contains-task-list) {
+  list-style-type: disc;
   margin-inline-start: --spacing(5);
   margin-inline-end: --spacing(1);
 
   & li {
     padding-inline-start: --spacing(2);
-  }
-}
-
-ul.list-pointy {
-  margin-inline: --spacing(1);
-
-  & li {
-    text-indent: 1.5rem hanging;
-  }
-
-  & li::before {
-    content: "\27a4";
-    display: inline-block;
-    transform: translateY(-1.9px);
-    font-size: 0.65rem;
-    width: 1.5rem;
-    padding-inline-end: --spacing(2);
   }
 }
 
@@ -47,14 +30,19 @@ li {
   }
 }
 
+ul.contains-task-list .task-list-item input {
+  margin-inline-start: --spacing(3);
+  margin-inline-end: --spacing(4);
+}
+
 blockquote,
 .markdown-alert {
   --accent: var(--frame-high);
   border-inline-start: --spacing(1) solid var(--accent);
   padding-inline-start: --spacing(4);
   padding-block: --spacing(2);
-  border-top-right-radius: --spacing(2);
-  border-bottom-right-radius: --spacing(2);
+  border-top-right-radius: --spacing(1);
+  border-bottom-right-radius: --spacing(1);
 }
 
 blockquote > p:not(:last-child) {
@@ -80,7 +68,7 @@ blockquote > footer > cite {
   box-shadow:
     0 12px 32px -28px var(--frame-low) inset,
     0 -9px 32px -28px var(--frame-low) inset,
-    0 3px 12px -4px #0003,
+    0 3px 12px -6px #0003,
     64px 0 54px -42px color-mix(in lch, var(--accent) 20%, transparent) inset;
 
   & > p:not(.markdown-alert-title, :last-child) {

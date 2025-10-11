@@ -32,7 +32,10 @@ const title = [routeTitle, pageTitle, siteTitle].filter((x) => x).join(" - ");
     <slot />
     <footer class="lane py-4 border-t border-frame">
       <span class="font-mono text-xs text-center text-frame-high">
-        made with <span class="icon-[ph--heart]"></span> in PDX
+        made with
+        <span class="sr-only">love</span>
+        <span class="icon-[ph--heart] align-sub"></span>
+        in PDX
       </span>
     </footer>
   </body>

@@ -1,3 +1,8 @@
+@utility italic {
+  font-style: italic;
+  font-style: oblique 7.5deg;
+}
+
 @utility lane {
   & {
     display: grid;

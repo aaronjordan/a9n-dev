@@ -2,7 +2,8 @@
   "name": "@repo/tailwind",
   "type": "module",
   "exports": {
-    "./css": "./dist/main.css"
+    "./css": "./src/package.css",
+    "./full-css": "./dist/main.css"
   },
   "scripts": {
     "build": "bunx @tailwindcss/cli -i ./src/main.css -o ./dist/main.css",

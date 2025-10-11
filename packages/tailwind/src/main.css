@@ -1,4 +1,11 @@
+/* 
+
+Builds Tailwind across the whole monorepo.
+
+This is cool for test apps, but real apps should likely own their Tailwind
+bundle to take advantage of more surgical `source` declarations.
+
+*/
+
 @import "tailwindcss" source("../../../");
-@import "./reset.css" layer(base);
-@import "./theme.css" layer(theme);
-@import "./utility.css";
+@import "./package.css";
