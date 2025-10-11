@@ -68,6 +68,6 @@ hgroup > :last-child {
   hgroup > :last-child {
     font-size: 1.1rem;
     font-style: oblique 7.5deg;
-    opacity: 0.6; /* TODO: use real color */
+    opacity: 0.8; /* TODO: use real color */
   }
 }

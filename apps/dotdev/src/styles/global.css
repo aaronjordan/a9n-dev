@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@repo/tailwind/css";
-@import "./gruv.css" layer(theme);
+@import "@repo/colorbox/palettes/gruv.css" layer(theme);
+@import "@repo/colorbox/maps/gruv.css" layer(theme);
 @plugin "@iconify/tailwind4" {
   scale: 1.1;
 }
@@ -13,30 +14,6 @@
      font does not include any stylistic sets for some reason...
    */
   src: url("/Figtree.woff2") format("woff2");
-}
-
-/* gruv theme / dark */
-/* TODO: create more themes and host for this logical token mapping */
-:root {
-  --content-low: var(--gb-light2);
-  --content: var(--gb-light1);
-  --content-high: var(--gb-light0);
-  --frame-high: var(--gb-dark4);
-  --frame: var(--gb-dark3);
-  --frame-low: var(--gb-dark2);
-  --surface-low: var(--gb-dark0);
-  --surface: color-mix(in srgb, var(--gb-dark0), var(--gb-dark1));
-  --surface-high: var(--gb-dark1);
-
-  --highlight: color-mix(in lch, var(--gb-faded-yellow) 40%, transparent);
-  --selection: color-mix(in lch, var(--gb-neutral-orange) 40%, transparent);
-
-  --blue: var(--gb-neutral-blue);
-  --green: var(--gb-neutral-green);
-  --yellow: var(--gb-neutral-yellow);
-  --orange: var(--gb-neutral-orange);
-  --red: var(--gb-neutral-red);
-  --purple: var(--gb-neutral-purple);
 }
 
 body {

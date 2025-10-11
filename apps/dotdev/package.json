@@ -12,6 +12,7 @@
     "@astrojs/cloudflare": "^12.6.7",
     "@astrojs/mdx": "^4.3.4",
     "@fontsource/google-sans-code": "^5.2.1",
+    "@repo/colorbox": "workspace:*",
     "@repo/tailwind": "workspace:*",
     "@tailwindcss/vite": "^4.1.12",
     "astro": "^5.13.2",

@@ -1,4 +1,5 @@
 ---
+import ThemeToggle from "./ThemeToggle.astro";
 import TitleText from "./TitleText.astro";
 
 const routes = [
@@ -68,10 +69,8 @@ const routes = [
       <!-- probably will add some menu here... -->
       <!-- <button class="rounded-full hidden md:flex">
         <span class="icon-[ph--person-simple-circle]"></span>
-      </button>
-      <button class="rounded-full flex">
-        <span class="icon-[ph--dots-three-circle]"></span>
       </button> -->
+      <ThemeToggle />
     </div>
     <ul class="flex flex-wrap gap-y-0 gap-x-4">
       {

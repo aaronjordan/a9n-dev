@@ -1,0 +1,107 @@
+:root,
+html.light {
+  --content-low: var(--gb-dark2);
+  --content: var(--gb-dark1);
+  --content-high: var(--gb-dark0);
+  --frame-high: var(--gb-light4);
+  --frame: var(--gb-light3);
+  --frame-low: var(--gb-light2);
+  --surface-low: var(--gb-light0);
+  --surface: color-mix(in srgb, var(--gb-light0), var(--gb-light0-hard));
+  --surface-high: var(--gb-light0-hard);
+
+  --highlight: color-mix(in lch, var(--gb-faded-yellow) 40%, transparent);
+  --selection: color-mix(in lch, var(--gb-neutral-orange) 40%, transparent);
+
+  --red: var(--gb-neutral-red);
+  --green: var(--gb-faded-green);
+  --yellow: var(--gb-faded-yellow);
+  --blue: var(--gb-neutral-blue);
+  --purple: var(--gb-neutral-purple);
+  --aqua: var(--gb-neutral-aqua);
+  --orange: var(--gb-neutral-orange);
+
+  --code-foreground: var(--gb-dark0);
+  --code-background: var(--gb-light0);
+  --code-token-constant: var(--gb-neutral-purple);
+  --code-token-string: var(--gb-neutral-aqua);
+  --code-token-comment: var(--gb-light4);
+  --code-token-keyword: var(--gb-neutral-red);
+  --code-token-parameter: var(--gb-dark2);
+  --code-token-function: var(--gb-neutral-blue);
+  --code-token-string-expression: var(--gb-neutral-green);
+  --code-token-punctuation: var(--gb-dark3);
+  --code-token-link: var(--gb-dark4);
+}
+
+.dark {
+  --content-low: var(--gb-light2);
+  --content: var(--gb-light1);
+  --content-high: var(--gb-light0);
+  --frame-high: var(--gb-dark4);
+  --frame: var(--gb-dark3);
+  --frame-low: var(--gb-dark2);
+  --surface-low: var(--gb-dark0);
+  --surface: color-mix(in srgb, var(--gb-dark0), var(--gb-dark1));
+  --surface-high: var(--gb-dark1);
+
+  --highlight: color-mix(in lch, var(--gb-faded-yellow) 40%, transparent);
+  --selection: color-mix(in lch, var(--gb-neutral-orange) 40%, transparent);
+
+  --red: var(--gb-neutral-red);
+  --green: var(--gb-neutral-green);
+  --yellow: var(--gb-bright-yellow);
+  --blue: var(--gb-bright-blue);
+  --purple: var(--gb-neutral-purple);
+  --aqua: var(--gb-neutral-aqua);
+  --orange: var(--gb-bright-orange);
+
+  --code-foreground: var(--gb-light1);
+  --code-background: var(--gb-dark0);
+  --code-token-constant: var(--gb-bright-purple);
+  --code-token-string: var(--gb-bright-aqua);
+  --code-token-comment: var(--gb-gray-245);
+  --code-token-keyword: var(--gb-bright-red);
+  --code-token-parameter: var(--gb-light1);
+  --code-token-function: var(--gb-bright-aqua);
+  --code-token-string-expression: var(--gb-bright-green);
+  --code-token-punctuation: var(--gb-light3);
+  --code-token-link: var(--gb-light4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --content-low: var(--gb-light2);
+    --content: var(--gb-light1);
+    --content-high: var(--gb-light0);
+    --frame-high: var(--gb-dark4);
+    --frame: var(--gb-dark3);
+    --frame-low: var(--gb-dark2);
+    --surface-low: var(--gb-dark0);
+    --surface: color-mix(in srgb, var(--gb-dark0), var(--gb-dark1));
+    --surface-high: var(--gb-dark1);
+
+    --highlight: color-mix(in lch, var(--gb-faded-yellow) 40%, transparent);
+    --selection: color-mix(in lch, var(--gb-neutral-orange) 40%, transparent);
+
+    --red: var(--gb-neutral-red);
+    --green: var(--gb-neutral-green);
+    --yellow: var(--gb-bright-yellow);
+    --blue: var(--gb-bright-blue);
+    --purple: var(--gb-neutral-purple);
+    --aqua: var(--gb-neutral-aqua);
+    --orange: var(--gb-bright-orange);
+
+    --code-foreground: var(--gb-light1);
+    --code-background: var(--gb-dark0);
+    --code-token-constant: var(--gb-bright-purple);
+    --code-token-string: var(--gb-bright-aqua);
+    --code-token-comment: var(--gb-gray-245);
+    --code-token-keyword: var(--gb-bright-red);
+    --code-token-parameter: var(--gb-light1);
+    --code-token-function: var(--gb-bright-aqua);
+    --code-token-string-expression: var(--gb-bright-green);
+    --code-token-punctuation: var(--gb-light3);
+    --code-token-link: var(--gb-light4);
+  }
+}

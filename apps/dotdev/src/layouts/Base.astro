@@ -1,8 +1,6 @@
 ---
-// import "@fontsource-variable/figtree";
 import "@fontsource/google-sans-code/400.css";
 import "@fontsource/google-sans-code/600.css";
-import { ClientRouter } from "astro:transitions";
 
 import Header from "../components/Header.astro";
 import "../styles/global.css";
@@ -15,17 +13,33 @@ interface Props {
 const { pageTitle, routeTitle } = Astro.props;
 const siteTitle = "Aaron Jordan";
 
-const title = [routeTitle, pageTitle, siteTitle].filter((x) => x).join(" - ");
+const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
 ---
 
-<html lang="en" class="h-full">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <ClientRouter />
+    <script is:inline>
+      const t = localStorage.getItem("t");
+      const maps = {
+        1: { name: "light", icon: "icon-[ph--sun]" },
+        2: { name: "dark", icon: "icon-[ph--moon]" },
+      };
+      const map = t in maps ? maps[t] : null;
+      if (map) {
+        document.documentElement.classList.add(map.name);
+        const listener = () => {
+          const themeIcon = "[data-theme-button] span";
+          document.querySelector(themeIcon).classList.value = map.icon;
+          document.removeEventListener(listener);
+        };
+        document.addEventListener("readystatechange", listener);
+      }
+    </script>
   </head>
   <body>
     <Header />

@@ -16,8 +16,8 @@
       "dependencies": {
         "@astrojs/cloudflare": "^12.6.7",
         "@astrojs/mdx": "^4.3.4",
-        "@fontsource-variable/figtree": "^5.2.8",
         "@fontsource/google-sans-code": "^5.2.1",
+        "@repo/colorbox": "workspace:*",
         "@repo/tailwind": "workspace:*",
         "@tailwindcss/vite": "^4.1.12",
         "astro": "^5.13.2",
@@ -42,6 +42,9 @@
       "peerDependencies": {
         "typescript": "^5",
       },
+    },
+    "packages/colorbox": {
+      "name": "@repo/colorbox",
     },
     "packages/tailwind": {
       "name": "@repo/tailwind",
@@ -156,8 +159,6 @@
 
     "@fastify/busboy": ["@fastify/busboy@2.1.1", "", {}, "sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA=="],
 
-    "@fontsource-variable/figtree": ["@fontsource-variable/figtree@5.2.8", "", {}, "sha512-T1X/m2Yw0nKSlbBmaPdZR9Ed1I0cXZVIGc6kScyo9wgyxtGXR+bawboP+W2DHNMHWz90JEz1IAEPQ5bcNprn0w=="],
-
     "@fontsource/google-sans-code": ["@fontsource/google-sans-code@5.2.1", "", {}, "sha512-zG46Krc6qWpYMTzyGq8v4eQsyOY4FmgZed4NTVhqUheriI5V+lhHd9Duhae7XeiYulmgoKQVbBp9kj61cn2K/g=="],
 
     "@iconify-json/ph": ["@iconify-json/ph@1.2.2", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-PgkEZNtqa8hBGjHXQa4pMwZa93hmfu8FUSjs/nv4oUU6yLsgv+gh9nu28Kqi8Fz9CCVu4hj1MZs9/60J57IzFw=="],
@@ -257,6 +258,8 @@
     "@poppinss/exception": ["@poppinss/exception@1.2.2", "", {}, "sha512-m7bpKCD4QMlFCjA/nKTs23fuvoVFoA83brRKmObCUNmi/9tVu8Ve3w4YQAnJu4q3Tjf5fr685HYIC/IA2zHRSg=="],
 
     "@primer/octicons": ["@primer/octicons@19.19.0", "", { "dependencies": { "object-assign": "^4.1.1" } }, "sha512-LBbL8nOl6FWMDy7riKB5ppHLtffY7loRq+CDGj0D5G1Xdo2mKlSOQy3rWy2RVE8SxxPFL+mj46C1nG+smKBEZA=="],
+
+    "@repo/colorbox": ["@repo/colorbox@workspace:packages/colorbox"],
 
     "@repo/tailwind": ["@repo/tailwind@workspace:packages/tailwind"],
 

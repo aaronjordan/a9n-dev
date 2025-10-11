@@ -1,0 +1,22 @@
+<button class="rounded-full flex" data-theme-button>
+  <span class="icon-[ph--palette]"></span>
+</button>
+
+<script>
+  const maps: Record<string, { name: string; icon: string }> = {
+    1: { name: "light", icon: "icon-[ph--sun]" },
+    2: { name: "dark", icon: "icon-[ph--moon]" },
+  };
+  const themeKeys = [null, "1", "2"];
+
+  const button = document.querySelector("[data-theme-button]");
+  button?.addEventListener("click", () => {
+    const key = localStorage.getItem("t");
+    const nextIdx = (themeKeys.indexOf(key) + 1) % themeKeys.length;
+    const next = themeKeys[nextIdx];
+    next ? localStorage.setItem("t", next) : localStorage.removeItem("t");
+    const map = next ? maps[next] : { name: "", icon: "icon-[ph--palette]" };
+    document.documentElement.classList.value = map.name;
+    button.querySelector("span")!.classList.value = map.icon;
+  });
+</script>
