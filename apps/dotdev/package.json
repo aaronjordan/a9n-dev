@@ -11,7 +11,6 @@
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.7",
     "@astrojs/mdx": "^4.3.4",
-    "@fontsource-variable/figtree": "^5.2.8",
     "@fontsource/google-sans-code": "^5.2.1",
     "@repo/tailwind": "workspace:*",
     "@tailwindcss/vite": "^4.1.12",

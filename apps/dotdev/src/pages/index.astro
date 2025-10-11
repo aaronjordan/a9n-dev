@@ -1,10 +1,11 @@
 ---
+import Social from "../components/Social.astro";
 import Column from "../layouts/Column.astro";
 ---
 
 <Column routeTitle="About">
   <hgroup class="pt-12 pb-8">
-    <h1 class="text-2xl">Aaron Jordan 👋</h1>
+    <h1 class="font-sans text-2xl">Aaron Jordan 👋</h1>
     <p>
       Senior Software Engineer at
       <a target="_blank" href="https://woflow.com">Woflow</a>
@@ -22,5 +23,6 @@ import Column from "../layouts/Column.astro";
     something JavaScript and "ooh Svelte did it better" and whatever else.
   </p>
   <h2>Social</h2>
-  <p>Let's connect!</p>
+  <p>Let's connect! Find me on any of the platforms below.</p>
+  <Social />
 </Column>

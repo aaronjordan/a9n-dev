@@ -1,4 +1,6 @@
 ---
+import TitleText from "./TitleText.astro";
+
 const routes = [
   { to: "/", label: "about" },
   { to: "/notebook", label: "notebook" },
@@ -57,20 +59,19 @@ const routes = [
   <nav class="grid grid-cols-[1fr_auto] pt-8 pb-4">
     <ul class="text-xl">
       <li>
-        <a class="text-content-low" href="/">
-          <span class="text-[1.325rem] font-medium font-sans">a9n</span>.dev
-        </a>
+        <a class="text-content-low" href="/"><TitleText /></a>
       </li>
     </ul>
     <div
       class="row-span-2 self-center justify-self-end flex gap-1 text-2xl text-yellow"
     >
-      <button class="rounded-full hidden md:flex">
+      <!-- probably will add some menu here... -->
+      <!-- <button class="rounded-full hidden md:flex">
         <span class="icon-[ph--person-simple-circle]"></span>
       </button>
       <button class="rounded-full flex">
         <span class="icon-[ph--dots-three-circle]"></span>
-      </button>
+      </button> -->
     </div>
     <ul class="flex flex-wrap gap-y-0 gap-x-4">
       {
