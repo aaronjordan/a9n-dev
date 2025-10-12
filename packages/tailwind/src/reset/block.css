@@ -22,7 +22,7 @@ ol {
   }
 }
 
-li {
+ul:not(.u) li {
   margin-top: --spacing(1);
 
   &:first-child {

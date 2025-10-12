@@ -52,7 +52,7 @@ html.light {
   --green: var(--gb-neutral-green);
   --yellow: var(--gb-bright-yellow);
   --blue: var(--gb-bright-blue);
-  --purple: var(--gb-neutral-purple);
+  --purple: var(--gb-bright-purple);
   --aqua: var(--gb-neutral-aqua);
   --orange: var(--gb-bright-orange);
 
@@ -88,7 +88,7 @@ html.light {
     --green: var(--gb-neutral-green);
     --yellow: var(--gb-bright-yellow);
     --blue: var(--gb-bright-blue);
-    --purple: var(--gb-neutral-purple);
+    --purple: var(--gb-bright-purple);
     --aqua: var(--gb-neutral-aqua);
     --orange: var(--gb-bright-orange);
 
