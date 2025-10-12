@@ -7,14 +7,15 @@ body {
   overflow-x: hidden;
   width: 100%;
   height: 100%;
+  background-color: var(--surface-low);
 }
 
-body {
+.app-root {
   height: max(100%, stretch);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  background: var(--surface-low);
+  background-color: var(--surface-low);
   color: var(--content);
   line-height: 1.75;
 }

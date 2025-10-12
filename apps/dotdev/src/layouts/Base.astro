@@ -32,25 +32,27 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
       const map = t in maps ? maps[t] : null;
       if (map) {
         document.documentElement.classList.add(map.name);
-        const listener = () => {
+        const cb = () => {
           const themeIcon = "[data-theme-button] span";
           document.querySelector(themeIcon).classList.value = map.icon;
-          document.removeEventListener(listener);
         };
-        document.addEventListener("readystatechange", listener);
+        document.addEventListener("readystatechange", cb, { once: true });
       }
     </script>
   </head>
   <body>
-    <Header />
-    <slot />
-    <footer class="lane py-4 border-t border-frame-low">
-      <span class="font-mono text-xs text-center text-frame-high">
-        made with
-        <span class="sr-only">love</span>
-        <span class="icon-[ph--heart] align-sub"></span>
-        in PDX
-      </span>
-    </footer>
+    <!-- .app-root is a workaround for a Safari CSS var color bug... -->
+    <div class="app-root transition-colors">
+      <Header />
+      <slot />
+      <footer class="lane py-4 border-t border-frame-low">
+        <span class="font-mono text-xs text-center text-frame-high">
+          made with
+          <span class="sr-only">love</span>
+          <span class="icon-[ph--heart] align-sub"></span>
+          in PDX
+        </span>
+      </footer>
+    </div>
   </body>
 </html>

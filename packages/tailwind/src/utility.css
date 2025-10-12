@@ -31,7 +31,7 @@
       1px 0 0 0 var(--frame-low),
       -1px 0 0 0 var(--frame-low);
     box-sizing: content-box;
-    z-index: -1;
+    pointer-events: none;
   }
 
   & > * {
