@@ -4,8 +4,8 @@ import TitleText from "./TitleText.astro";
 
 const routes = [
   { to: "/", label: "about" },
-  { to: "/notebook", label: "notebook" },
-  { to: "/snippets", label: "snippets" },
+  // { to: "/notebook", label: "notebook" },
+  // { to: "/snippets", label: "snippets" },
   // { to: "/bookmarks", label: "bookmarks" },
 ];
 ---
@@ -72,7 +72,7 @@ const routes = [
       </button> -->
       <ThemeToggle />
     </div>
-    <ul class="flex flex-wrap gap-y-0 gap-x-4">
+    <!-- <ul class="u flex flex-wrap mt-1 gap-y-0 gap-x-4">
       {
         routes.map((r) => (
           <li>
@@ -80,6 +80,6 @@ const routes = [
           </li>
         ))
       }
-    </ul>
+    </ul> -->
   </nav>
 </header>

@@ -1,10 +1,37 @@
 ---
-const accounts = [{}];
+const accounts = [
+  {
+    class: "text-blue",
+    label: "linkedin",
+    url: "https://www.linkedin.com/in/aaronjordandev/",
+  },
+
+  {
+    class: "text-yellow",
+    label: "instagram",
+    url: "https://www.instagram.com/heyitsaaronjordan/",
+  },
+  {
+    class: "text-green",
+    label: "twitter",
+    url: "https://x.com/aaronjordandev",
+  },
+  {
+    class: "text-purple",
+    label: "github",
+    url: "https://github.com/aaronjordan/",
+  },
+];
 ---
 
-<ul class="u flex flex-wrap justify-evenly">
-  <li class="text-green">linkedin</li>
-  <li class="text-blue">github</li>
-  <li class="text-orange">instagram</li>
-  <li class="text-yellow">twitter</li>
+<ul class="u flex flex-wrap justify-evenly items-center">
+  {
+    accounts.map((a) => (
+      <li>
+        <a class={a.class} target="_blank" href={a.url}>
+          {a.label}
+        </a>
+      </li>
+    ))
+  }
 </ul>
