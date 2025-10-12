@@ -4,19 +4,52 @@ interface Props {
     id: string;
     data: {
       title: string;
+      pubDate: Date;
     };
   }[];
 }
+type Post = Props["posts"][number];
 
-console.log(Astro.routePattern);
+const posts = Astro.props.posts.toSorted(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+function href(post: Post) {
+  return `${Astro.routePattern}/${post.id}`;
+}
+
+function getDatestamp(post: Post) {
+  const iso = post.data.pubDate.toISOString();
+  const parts = iso.split("T")[0].split("-");
+  parts.shift();
+  return parts.join(" / ");
+}
 ---
 
-<ul>
+<p class="year-marker flex gap-[19px] text-xl">2025</p>
+<ul class="u space-y-2">
   {
-    Astro.props.posts.map((post) => (
-      <li>
-        <a href={`${Astro.routePattern}/${post.id}`}>{post.data.title}</a>
+    posts.map((post) => (
+      <li class="relative flex items-center gap-4">
+        <time class="font-light" datetime={post.data.pubDate.toISOString()}>
+          {getDatestamp(post)}
+        </time>
+        <span class="h-3 border-l border-frame-low" />
+        <a class="font-semibold" href={href(post)}>
+          {post.data.title}
+        </a>
       </li>
     ))
   }
 </ul>
+
+<style>
+  .year-marker::after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+    height: 1px;
+    margin-block: auto;
+    background: var(--color-frame-low);
+  }
+</style>

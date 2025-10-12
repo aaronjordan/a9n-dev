@@ -1,14 +1,6 @@
 ---
-title: First
+title: First post about something interesting
+pubDate: 2025-10-02
 ---
 
-Hello world
-
-> [!NOTE]
-> This is a note.
-
-> Consider the world around you when you make these choices.
-
-```
-This is a <pre> element, but recieves no syntax highlighting.
-```
+this is just a test post
