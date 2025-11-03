@@ -1,0 +1,103 @@
+---
+interface Props {
+  headings: {
+    depth: number;
+    slug: string;
+    text: string;
+  }[];
+  icon?: string;
+  title?: string;
+}
+
+const icon = Astro.props.icon ?? "icon-[ph--note-pencil]";
+const title = Astro.props.title ?? "We'll cover...";
+
+/**
+ * Used to keep tally of heading numbers by level when mapping the flat
+ * `headings` collection.
+ */
+const counter: number[] = [];
+
+const leadingCountExp = /^\d+\.\W+?/; // "4. Thing" => "4. "
+function stripLeadingCount(text: string): string {
+  const match = text.match(leadingCountExp);
+  if (match) return text.slice(match[0].length);
+  return text;
+}
+
+function resolveLiClass(depth: number) {
+  const base =
+    "pr-6 -indent-[1.1rem] [&_a]:no-underline [&_a]:text-content-low [&_a:hover]:underline [&_a:focus-within]:underline";
+
+  switch (depth) {
+    case 1:
+      throw Error(_h1Error);
+    case 2:
+      return [base, "font-medium pl-6"].join(" ");
+    case 3:
+      return [base, "pl-11"].join(" ");
+    default:
+      return "hidden";
+  }
+}
+
+function resolveLabel(text: string, depth: number) {
+  const base = stripLeadingCount(text);
+  if (depth === 2) return `${counter[2]}. ${base}`;
+  if (depth === 3) return `${toRoman(counter[3])}. ${base}`;
+  return base;
+}
+
+function toRoman(n: number): string {
+  switch (n) {
+    case 1:
+      return "i";
+    case 2:
+      return "ii";
+    case 3:
+      return "iii";
+    case 4:
+      return "iv";
+    case 5:
+      return "v";
+    case 6:
+      return "vi";
+    case 7:
+      return "vii";
+    case 8:
+      return "viii";
+    default:
+      console.error("num: ", n);
+      throw Error("Aaron needs to keep counting");
+  }
+}
+
+const _h1Error =
+  "H1 detected in <Content />, but should only appear as `frontmatter.title`";
+---
+
+<!-- TODO: style and indent and make nice! -->
+<blockquote class="markdown-alert markdown-alert-tip py-6 w-fit">
+  <span class="markdown-alert-title text-xl">
+    <span class={icon}></span>
+    {title}
+  </span>
+  <ul class="list-none space-y-3 leading-5 mt-3 ml-0">
+    {
+      Astro.props.headings.map((h) => {
+        if (h.slug === "footnote-label") return null; // GFM
+
+        counter[h.depth] ??= 0;
+        counter.length = h.depth + 1; // Reset subcounts
+        ++counter[h.depth];
+
+        const href = `#${h.slug}`;
+        const label = resolveLabel(h.text, h.depth);
+        const anchor = <a {href}>{label}</a>;
+        const liClass = resolveLiClass(h.depth);
+
+        return <li class={liClass}>{anchor}</li>;
+      })
+    }
+  </ul>
+</blockquote>

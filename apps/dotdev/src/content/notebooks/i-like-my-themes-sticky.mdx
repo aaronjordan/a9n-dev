@@ -1,0 +1,238 @@
+---
+title: I like my themes sticky
+subtitle: A few ways to persist user preferences and resolve SSR hydration challenges
+pubDate: 2025-11-02
+---
+
+import TableOfContents from "../../components/TableOfContents.astro";
+
+One silly and quite avoidable issue that often catches my attention as a web developer is when a site loads in with a flash of wrong or incomplete settings.
+
+Most often, it's a color theme adapting to the user's device once the JS kicks off. Sometimes, it's a toolbar going from a default expanded state to a collapsed version you always use. Maybe it's even a profile button in the upper corner that — for a couple of seconds — hasn't the slightest idea who you are or if you're logged in.
+
+_Bonus points if that element snaps from a "Login" link to a "Hi, \{\{name\}\}" or "Logout" CTA..._
+
+These transitions are attention-grabbing, jarring, and usually pretty avoidable. Here are a few ideas.
+
+<TableOfContents headings={getHeadings()} />
+
+## Why this happens
+
+There's a lot of _process_ involved with loading a webpage, much of which I imagine you're probably already familiar with.
+
+From a high level, a _request_ is sent to a server that replies with _response_ of HTML that the browser goes to work with. A simple HTML document may contain everything needed to show the page, but cases like this are quite rare. Generally, this document will outline some related content that's also needed to make the page work.
+
+That might be a CSS file to get so that reusable styling is accessible to the page or could be JavaScript files to fetch and run, all to make buttons interactive or annoy you with popups. It also might be fonts, your browser (hopefully) happily loaded [Figtree](https://www.erikdkennedy.com/projects/figtree.html) on this page, which you're currently reading. Of course, there are ["replaced elements"](https://developer.mozilla.org/en-US/docs/Glossary/Replaced_elements) like embedded sites, images, or videos. Your browser will find where to go for many of these assets within the initial HTML response sent from the server.
+
+As it assembles this list, the browser will begin fetching that content. Generally, _stuff_ listed first in the document is fetched earliest, but this isn't _that_ important to this post and there are exceptions... What is important is that **getting all this additional stuff takes time**. In that time waiting on assets to load the browser is already attempting to render the initial HTML. The effect of this is particularly noticeable on slow networks or on websites linking excessive assets.
+
+In the earlier days of single-page applications, this would easily result in a state where nothing at all is visible until all the page's JavaScript is loaded and can kick off, drawing elements onto the empty page.
+
+Fortunately, we now live in a world where NodeJS[^runtimes] is _pretty good_ at making an initial pass at what the client (your browser) will create when "starting up" the website and sending that along as HTML instead of an empty app shell. This ability to render a complex application on the server side, then ship meaningful initial HTML can make page loads feel much better for single-page applications, in some cases dramatically cutting down on the time it takes to get meaningful content on the user's screen.
+
+[^runtimes]: I really wanted to throw in a "(or better runtimes)" here but it was a bit too interruptive. [Bun](https://bun.sh) and [Deno](https://deno.com) are both excellent alternatives to [Node](https://nodejs.org/) built on modern JavaScript standards.
+
+That said, this power comes with tradeoffs.
+
+It's easy to unknowingly make assumptions about where some piece of JavaScript code will run. For instance, if I have a user signed in, maybe I'll put a little information about what they're up to in [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) so that we can easily resume their session later. Perhaps, I'll do a quick check to see what their system color theme is and punch an associated class onto the document's `<body>`... Many such cases!
+
+It's made increasingly difficult to be confident about where code runs as modern web frameworks blur the line between server and client, choosing to support many modes of rendering. _Heck_, most developers I know using [NextJS](https://nextjs.org/docs) trust (at least at a glance) that files [marked with `"use client"`](https://nextjs.org/docs/app/api-reference/directives/use-client) will only run on the client. **This is not true**, as code marked with that directive **will still be SSR'd** before being passed along to the client and hydrated. [There's an additional step](https://nextjs.org/docs/app/guides/lazy-loading#skipping-ssr) to make a file effectively `"use only client"`. In these cases, if you made a bad assumption about the runtime environment, you'll be greeted with [a fun little error](https://nextjs.org/docs/messages/react-hydration-error).
+
+_To be really clear_, my intent isn't to single out NextJS. JavaScript is treated as an [isomorphic language](https://en.wikipedia.org/wiki/Isomorphic_JavaScript) in most web-building meta-frameworks common in open source today. I find that some have clearer ways to express what can **only** run on the client versus what should **never** run on the client, but nonetheless, the same concerns always exist and can cause poor experiences like the ones I outlined earlier.
+
+So, what do we do about it?
+
+## The easiest solve for light and dark themes
+
+This strategy is narrower in scope than the others, but it would be silly of me to **not** mention it. If the only awkward transition you're facing is selecting a light or dark theme based on the user's preference and you don't want to surface a toggle button, this can be easily mitigated.
+
+Two easy options:
+
+### 1. Using [`prefers-color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme)
+
+This is a classic and is often supported by theme generators. For example, [see the CSS output of the Radix palette creator](https://www.radix-ui.com/colors/custom). Using a media query to target users who prefer dark mode and controlling some CSS properties with that query is quite common.
+
+```css
+:root {
+  --text: black;
+  --background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: white;
+    --background: black;
+  }
+}
+```
+
+### 2. Using [`light-dark`](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark)
+
+This is a newer CSS feature, so I tend to reach for `prefers-color-scheme` out of habit and support for older iPhones, but you can express color alternates with the `light-dark` function.
+
+```css
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  color: light-dark(black, white);
+  background: light-dark(white, black);
+}
+```
+
+## Using cookies for server-side rendered content
+
+To go beyond passive theme controls **and** maintain that the _browser_ owns this state, we may need to give the _server_ a bit more context to work with. The easiest way to persist state across reloads within a browser _and share that state with the server_ is to [set a cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies).
+
+> [!WARNING]
+> [Much like `useEffect`](https://react.dev/learn/you-might-not-need-an-effect), it's easy to overly rely on cookies.
+>
+> With nice features like [built-in time based expiry](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#max-agenumber), the ability to only [apply to pages or requests at certain routes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#pathpath-value), and the convenience of it just _being there_ during server-side rendering, it's easy to get carried away. Bear in mind that relevant cookies are sent with _every request_ to the server. If you set a massive base64-encoded-JSON payload of an entire Redux bucket as a cookie, that may incur some challenges.
+
+Anyway, let's get on with totally responsible usage.
+
+One recent example I worked on was ensuring stable SSR for a collapsible side panel. You've almost definitely used something remarkably similar: a left nav with an "open" state that shows icons and labels and a "compact" state that shows only the icons. There are several extra ways to do this if we're only rendering on the client — we could reach for `localStorage`, for instance. But, we need the server to be aware of this state at request time... _Sounds a lot like a cookie to me._
+
+Working in a JavaScript metaframework like [NextJS](https://nextjs.org/) or [SvelteKit](https://svelte.dev/docs), it's quite easy to use common utilities between client and server for the reading and setting of the cookie, should you need to do both on either side. In my case, I only needed to share the cookie's name.
+
+```ts
+export const sidePanelOpenCookieName = "spo";
+```
+
+The client can control this token by using this custom hook as a drop-in replacement for `useState<boolean>`.
+
+```tsx
+import { sidePanelOpenCookieName } from "./utils";
+
+// Settings for the cookie, notably a long `max-age`.
+const cookieMeta = "; path=/dashboard; max-age=31536000";
+
+export function useSidePanelCookie(initialOpen: boolean) {
+  const [isOpen, setIsOpen] = useState(initialOpen);
+
+  return [
+    isOpen,
+    (nextState: boolean) => {
+      document.cookie = `${sidePanelOpenCookieName}=${nextState ? 1 : 0}${cookieMeta}`;
+      setIsOpen(nextState);
+    },
+  ];
+}
+```
+
+Once it's set, the server can read this during SSR to provide the `initialOpen` value.
+
+```tsx
+import { cookies } from "next/headers";
+import { sidePanelOpenCookieName } from "./utils";
+
+export async function Layout(props) {
+  const store = await cookies();
+  const exists = store.has(sidePanelOpenCookieName);
+  const sidePanelOpen = exists
+    ? store.get(sidePanelOpenCookieName).value === "1"
+    : true;
+
+  return (
+    <>
+      <SidePanel initialOpen={sidePanelOpen} />
+      {props.children}
+    </>
+  );
+}
+```
+
+It's simple, easy, and effective. Encode the _stuff_ we need to do SSR, use it on the server when it's time, keep it up to date as it changes. Get it with every request without too much thought. _Profit._
+
+**But what if we could sidestep requiring the server to adjust the rendered HTML at all?**
+
+## Going further with static content through scripting
+
+_This_ is a favorite of mine. When working with cookies in the way described above, we run into trouble with [statically generated pages](https://docs.astro.build/en/concepts/why-astro/#server-first). If we're _not_ serving unique HTML to each visitor, then it becomes much more challenging to serve the proper HTML unless we've found a way to pre-render **all the possible combinations** of persisted settings and route to the proper one at runtime. While you could employ that strategy, _this alternative_ requires much less up-front complexity.
+
+_Use an inline script to read and apply the browser's stateful values_. Scripts that are defined within an HTML document rather than linked through a tag like `<script src="something.js">` are executed as soon as they finish loading and before the next HTML node is processed. _Therefore,_ we could push a concise, quick snippet to run before the document is displayed.
+
+This site uses this concept to handle the application of a theme class[^astro-isinline]. At the time of writing, here's the full script:
+
+[^astro-isinline]: The way to provide an inline script for [Astro](https://docs.astro.build/en/concepts/why-astro/) is to use the [is:inline directive](https://docs.astro.build/en/reference/directives-reference/#isinline), which opts a template `<script>` out of bundling and optimizations.
+
+```js
+const t = localStorage.getItem("t");
+const maps = {
+  1: { name: "light", icon: "icon-[ph--sun]" },
+  2: { name: "dark", icon: "icon-[ph--moon]" },
+};
+const map = t in maps && maps[t];
+
+if (map) {
+  document.documentElement.classList.add(map.name);
+
+  const cb = () => {
+    const themeIcon = "[data-theme-button] span";
+    document.querySelector(themeIcon).classList.value = map.icon;
+  };
+  document.addEventListener("readystatechange", cb, { once: true });
+}
+```
+
+Walking through this code, there are three main features I'd like to call out.
+
+First, in contrast to during server-side rendering, we have full access to true browser APIs. Anything that we can do in synchronous code can be kicked off here unless it depends on some npm package you're waiting on. This _limits_ what you could do, sure, but usually a little message passing is all we need here anyway.
+
+In this instance, we grab the stateful value from `localStorage`, validate it against the theme maps that do exist, (`["1", "2"]`) and grab the corresponding theme with that key. This will create duplication in your codebase! The `maps` constant here can't be imported to some other module. You'll need a copy both here and wherever you're actually setting new values in storage unless you've figured out some cute way to inline a module in your build pipeline.
+
+Personally, I can't be bothered. 🙂
+
+```js
+const t = localStorage.getItem("t");
+const maps = {
+  1: { name: "light", icon: "icon-[ph--sun]" },
+  2: { name: "dark", icon: "icon-[ph--moon]" },
+};
+const map = t in maps && maps[t];
+```
+
+Second, if a valid theme is picked, we perform the change to the DOM that we need in order to avoid flashing an incorrect default theme first. Naturally, we can't write to the `<body>` as it doesn't exist yet. We'll push the `class` (or, for a different problem, some `data-*` attributes) onto the `<html>` element at the document's root. This is enough to apply the proper light/dark scheme.
+
+```js
+if (map) {
+  document.documentElement.classList.add(map.name);
+}
+```
+
+Finally, one tweak specific to this site is to replace the generic color palette icon with a sun or moon if there's an active color theme. Again, the `<body>` and its contents don't _yet_ exist, so we can't do this immediately.
+
+As a workaround for cases where you need to manipulate something in the document's body on initial load, [the `readystatechange` event is a hero](https://developer.mozilla.org/en-US/docs/Web/API/Document/readystatechange_event). Once the DOM is parsed, it will emit `"interactive"`, at which point we can begin manipulating arbitrary nodes. Given the `once` argument and where this script appears in the HTML, we can reasonably assume that this transition is the only one for which `cb` will ever be called.
+
+```js
+if (map) {
+  const cb = () => {
+    const themeIcon = "[data-theme-button] span";
+    document.querySelector(themeIcon).classList.value = map.icon;
+  };
+  document.addEventListener("readystatechange", cb, { once: true });
+}
+```
+
+This _shouldn't_ happen before the browser's first paint, but I believe in my case it does happen at least before the icon loads, as I don't see the generic icon before the themed one is swapped out. I hope you and your use case will be just as lucky, but be aware anything that's asynchronous in this script will likely not be tremendously helpful.
+
+That caveat aside, I find this to be a flexible enough pattern for "prefetching" settings that live on a user's device.
+
+## Utilizing a database for stronger persistence
+
+The last two solutions _work_, but if a logged-in user connects from a different device, they'll be back to the defaults for all of your settings. There are plenty of occasions that this is fine or even intended — for themes, it could let someone prefer light mode on their phone _and_ dark mode on their desktop.
+
+In more complex scenarios, this reset can be quite frustrating. If it takes a meaningful amount of time to customize options and you have a logged-in experience, your app should probably retain settings. Meanwhile, as that collection of options grows, the likelihood that it packs neatly into a cookie falls: we should look toward options like a table in the DB.
+
+How to model such a collection would vary wildly by app.
+
+If the user customizes a dashboard, perhaps there's a `user_dashboards` table or collection somewhere to store its configurables. If your app has a **ton** of functionality and embedded walkthroughs, perhaps you store which features the user has used [(or better, **when** they last used them)](https://ntietz.com/blog/that-boolean-should-probably-be-something-else/) to offer tutorials without getting in the way of workflows the user _definitely_ already knows well.
+
+A good sync experience can be quite satisfying, especially when working with apps and pages already requiring a decent amount of server-side work before getting to the client anyway. Load users' settings in parallel, apply them when they come in, and don't be afraid to throw _a slice_ of that synchronized state into a cookie if reading it _before_ kicking off whatever else your app needs to do helps.
+
+---
+
+I hope this provides some good insights! Working in JavaScript land has gotten much more complex with time and surely will continue to. I haven't always found it _particularly_ intuitive to apply the many concepts in this space to real-world problems, and judging by the number of websites and apps I open on a weekly basis that [flashbang me](https://youtu.be/qfxDEZX9K0o?si=IfOLPRXxuFq86_H3) from a default light mode to dark mode, I'm not alone in this.
+
+Until next time — whatever you use — may your transitions be smooth and loading feel snappy.

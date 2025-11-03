@@ -41,8 +41,9 @@ blockquote,
   border-inline-start: --spacing(1) solid var(--accent);
   padding-inline-start: --spacing(4);
   padding-block: --spacing(2);
-  border-top-right-radius: --spacing(1);
-  border-bottom-right-radius: --spacing(1);
+  border-top-right-radius: --spacing(2);
+  border-bottom-right-radius: --spacing(2);
+  background: var(--surface);
 }
 
 blockquote > p:not(:last-child) {
@@ -66,10 +67,8 @@ blockquote > footer > cite {
 
 .markdown-alert {
   box-shadow:
-    0 12px 32px -28px var(--frame-low) inset,
-    0 -9px 32px -28px var(--frame-low) inset,
-    0 3px 12px -6px #0003,
-    64px 0 54px -42px color-mix(in lch, var(--accent) 20%, transparent) inset;
+    0 6px 12px -6px #0003,
+    81px 0 54px -54px color-mix(in lch, var(--accent) 20%, transparent) inset;
 
   & > p:not(.markdown-alert-title, :last-child) {
     margin-bottom: --spacing(2);
@@ -81,6 +80,7 @@ blockquote > footer > cite {
   align-items: center;
   gap: --spacing(2);
   font-weight: 600;
+  text-shadow: 0 0 12px color-mix(in lch, var(--accent) 20%, transparent);
 
   & svg {
     fill: var(--accent);
@@ -104,6 +104,8 @@ blockquote > footer > cite {
 }
 
 pre {
+  --size: 0.925rem;
+  font-size: var(--size);
   overflow-x: auto;
   background-color: var(--surface);
   padding-block: --spacing(4);

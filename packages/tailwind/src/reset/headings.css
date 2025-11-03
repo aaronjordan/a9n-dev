@@ -1,52 +1,66 @@
 h1 {
-  font-size: 1.5rem;
+  --size: 1.5rem;
+  font-size: var(--size);
   font-weight: 250;
   letter-spacing: -0.033rem;
   line-height: calc(2 / 1.66); /* TODO, check should change these? others ok */
+  scroll-margin-top: --spacing(10);
 }
 h2 {
-  font-size: 1.33rem;
+  --size: 1.33rem;
+  font-size: var(--size);
   font-weight: 450;
   letter-spacing: -0.0167rem;
   line-height: calc(1.67 / 1.33);
+  scroll-margin-top: --spacing(8);
 }
 h3 {
-  font-size: 1.167rem;
+  --size: 1.167rem;
+  font-size: var(--size);
   font-weight: 525;
   line-height: 1.33;
+  scroll-margin-top: --spacing(6);
 }
 h4,
 h5,
 h6 {
   font-weight: 600;
+  scroll-margin-top: --spacing(6);
 }
 h4 {
-  font-size: 1.084rem;
+  --size: 1.084rem;
+  font-size: var(--size);
 }
 h5 {
-  font-size: 1rem;
+  --size: 1rem;
+  font-size: var(--size);
 }
 h6 {
-  font-size: 0.95rem;
+  --size: 0.95rem;
+  font-size: var(--size);
 }
 
 hgroup > :last-child {
-  font-size: 0.9rem;
+  --size: 0.9rem;
+  font-size: var(--size);
   font-style: oblique 7.5deg;
   color: var(--content-low);
 }
 
 @media screen and (min-width: 800px) {
   h1 {
-    font-size: 2rem;
+    --size: 2rem;
+    font-size: var(--size);
     line-height: calc(2 / 1.66);
   }
   h2 {
-    font-size: 1.66rem;
+    --size: 1.66rem;
+    font-size: var(--size);
     line-height: calc(1.67 / 1.33);
   }
   h3 {
-    font-size: 1.33rem;
+    --size: 1.33rem;
+    font-size: var(--size);
     font-weight: 525;
     line-height: 1.33;
   }
@@ -56,18 +70,22 @@ hgroup > :last-child {
     font-weight: 600;
   }
   h4 {
-    font-size: 1.167rem;
+    --size: 1.167rem;
+    font-size: var(--size);
   }
   h5 {
-    font-size: 1rem;
+    --size: 1rem;
+    font-size: var(--size);
   }
   h6 {
-    font-size: 0.9rem;
+    --size: 0.9rem;
+    font-size: var(--size);
   }
 
   hgroup > :last-child {
-    font-size: 1.1rem;
+    --size: 1.1rem;
+    font-size: var(--size);
     font-style: oblique 7.5deg;
-    opacity: 0.8; /* TODO: use real color */
+    opacity: 0.8; /* TODO: use real color always */
   }
 }

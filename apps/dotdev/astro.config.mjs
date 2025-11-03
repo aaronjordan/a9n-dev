@@ -5,6 +5,7 @@ import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import { createCssVariablesTheme } from "shiki";
 import { rehypeGithubAlerts } from "rehype-github-alerts";
+import remarkGfm from "remark-gfm";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
 
   markdown: {
     rehypePlugins: [rehypeGithubAlerts],
+    remarkPlugins: [remarkGfm],
     shikiConfig: {
       theme: createCssVariablesTheme({
         name: "css-variables",

@@ -3,6 +3,7 @@ import { glob } from "astro/loaders";
 
 const Post = z.object({
   title: z.string(),
+  subtitle: z.string().optional(),
   pubDate: z.date(),
 });
 

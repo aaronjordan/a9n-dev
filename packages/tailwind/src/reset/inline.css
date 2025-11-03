@@ -6,6 +6,7 @@ strong {
 i,
 em {
   font-style: italic;
+  font-style: oblique 7.5deg;
 }
 
 ins,
@@ -32,7 +33,7 @@ abbr,
 .inline-wave {
   text-decoration: underline;
   text-decoration-style: wavy;
-  text-underline-offset: 0.2rem;
+  text-underline-offset: 0.25rem;
 }
 
 a {
@@ -48,6 +49,11 @@ a {
     color: var(--content);
     color: color-mix(in lch, var(--yellow), var(--content-high));
   }
+}
+
+a[data-footnote-ref] {
+  text-decoration-style: dotted;
+  margin-inline-start: 1px;
 }
 
 /* header a:visited {
@@ -73,13 +79,16 @@ kbd {
 
 code:not(hgroup *, pre *) {
   display: inline-block;
+  text-decoration: inherit;
+  text-decoration-style: solid;
   background: var(--surface-high);
   border: 0.08rem solid var(--frame-low);
-  border-radius: 0.3rem;
+  border-radius: 0.2rem;
   color: var(--content-low);
   box-shadow: 0 0.03rem 0.75rem -0.1rem var(--frame-low) inset;
   padding: 0.18rem 0.3rem;
   line-height: 1;
   user-select: all;
-  font-size: 0.925rem;
+  /* this really should just be 1rem on GSC and 0.925rem on Figtree... */
+  font-size: calc((var(--size) * 1.4) - 0.5rem);
 }

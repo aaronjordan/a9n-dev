@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Column from "../../layouts/Column.astro";
+import PostTitle from "../../components/PostTitle.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("snippets");
@@ -12,6 +13,6 @@ const { Content } = await render(post);
 ---
 
 <Column routeTitle="Snippet">
-  <h1>{post.data.title}</h1>
+  <PostTitle title={post.data.title} subtitle={post.data.subtitle} />
   <Content />
 </Column>

@@ -1,0 +1,19 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+}
+
+const useGroup = Astro.props.subtitle;
+---
+
+{
+  useGroup ? (
+    <hgroup>
+      <h1>{Astro.props.title}</h1>
+      <p>{Astro.props.subtitle}</p>
+    </hgroup>
+  ) : (
+    <h1>{Astro.props.title}</h1>
+  )
+}
