@@ -1,0 +1,59 @@
+---
+pubDate: 2025-11-04
+title: Building a table of contents component in Astro
+---
+
+import TableOfContents from "../../components/TableOfContents.astro";
+
+In my longer posts, you'll generally see a table of contents that looks something like the example below. It took a bit of exploration to get that right and I'm quite happy with the component I have now, so let's dig into it a bit.
+
+<TableOfContents
+  title="In this post..."
+  headings={[
+    { depth: 2, slug: "", text: "A few things" },
+    { depth: 2, slug: "", text: "Tonight on Top Gear" },
+    { depth: 3, slug: "", text: "I have an argument with a Frenchman" },
+    { depth: 3, slug: "", text: "James has an argument with a gearbox" },
+    { depth: 3, slug: "", text: "And Hammond has an argument with gravity" },
+    { depth: 2, slug: "", text: "JS Frameworks, I guess" },
+    { depth: 3, slug: "", text: "NextJS" },
+    { depth: 3, slug: "", text: "SvelteKit" },
+    { depth: 2, slug: "", text: "A few more things?" },
+    { depth: 2, slug: "", text: "I'm out of ideas" },
+  ]}
+/>
+
+[Astro](https://docs.astro.build/en/concepts/why-astro/) is a fantastic metaframework for building websites with JavaScript. **It really shines** when working with static content; for example: marketing sites, documentation pages, or blogs _(hello!)_. A key reason for this is [thoughtful, out of the box, first class support for markdown](https://docs.astro.build/en/guides/markdown-content/). Combine this baseline with [an officially supported MDX extension](https://docs.astro.build/en/guides/integrations-guide/mdx/#using-frontmatter-variables-in-mdx) to unlock a tasty way to write freely in a simple text editor[^obsidian] and have the freedom to reach for advanced functionality through [remark/rehype plugins](https://docs.astro.build/en/guides/markdown-content/#adding-remark-and-rehype-plugins), HTML snippets in the `md` source, and components with MDX.
+
+[^obsidian]: [I'd recommend Obsidian](https://obsidian.md/) and their fantastic [Sync](https://obsidian.md/sync) product. It helps me jot down ideas anywhere and everywhere, even if I don't have a paper journal on me.
+
+In designing this component, I knew that [Astro generates unique IDs for headers](https://docs.astro.build/en/guides/markdown-content/#heading-ids) in MDX files and figured there must be some way to get them within a component. For a bit, I fumbled between forum posts and the Astro docs, believing I was at an impasse. [I could get `headings` from `render`](https://docs.astro.build/en/reference/modules/astro-content/#render), but I couldn't find a way to pass props into markdown created in a content collection. I had to push the HTML with `<Content />`, but neither that nor `render` took extra data arguments.
+
+I noticed that if I moved away from content collections, I could tamper with the rendered HTML a bit more easily [given the extra properties available](https://docs.astro.build/en/guides/markdown-content/#importing-markdown) on direct `.md` imports. I briefly explored rendering a placeholder and then swapping it out in the compiled output, but then ran across something much cleaner.
+
+[This particular section of the MDX docs](https://docs.astro.build/en/guides/integrations-guide/mdx/#using-frontmatter-variables-in-mdx) made me pause and think, "oooh, that _sure looks like_ a property on direct markdown imports...". I rushed to try calling `getHeadings` as a global within the `.mdx`. _It wrote a list of headings. I was in business._
+
+```mdx
+<TableOfContents headings={getHeadings()} />
+```
+
+Over in my `TableOfContents.astro` component, I outlined these props.
+
+```ts
+interface Props {
+  headings: {
+    depth: number;
+    slug: string;
+    text: string;
+  }[];
+  icon?: string;
+  title?: string;
+}
+```
+
+After that, all that was left was a bit of CSS magic and JS bullying to rework the link text a bit and isolate depth 2 and 3 headings. None of that was groundbreaking, but [have a look at the whole file if you'd like.](https://github.com/aaronjordan/a9n-dev/blob/main/apps/dotdev/src/components/TableOfContents.astro)
+
+> [!NOTE]
+> It's also possible to use [`remark-toc`](https://github.com/remarkjs/remark-toc) to generate a simple table of contents, which requires a different bit of configuration and a little more _magic_, as you have to define [one specific heading](https://github.com/remarkjs/remark-toc?tab=readme-ov-file#example-a-different-heading) that the TOC will use on all your pages. Given the built-in alternative, I didn't see this as particularly appealing.
+
+Maybe this `getHeadings` global availability for MDX is documented _somewhere_ in either the Astro or `@astrojs/mdx` documentation, but I haven't found it! _Hopefully_, it's intentional and here to stick around. I'd be surprised if it wasn't.

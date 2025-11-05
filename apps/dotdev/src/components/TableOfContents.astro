@@ -27,7 +27,7 @@ function stripLeadingCount(text: string): string {
 
 function resolveLiClass(depth: number) {
   const base =
-    "pr-6 -indent-[1.1rem] [&_a]:no-underline [&_a]:text-content-low [&_a:hover]:underline [&_a:focus-within]:underline";
+    "pr-2 -indent-[1.1rem] [&_a]:no-underline [&_a]:text-content-low [&_a:hover]:underline [&_a:focus-within]:underline";
 
   switch (depth) {
     case 1:
@@ -78,7 +78,7 @@ const _h1Error =
 
 <!-- TODO: style and indent and make nice! -->
 <blockquote class="markdown-alert markdown-alert-tip py-6 w-fit">
-  <span class="markdown-alert-title text-xl">
+  <span class="markdown-alert-title text-xl pr-6">
     <span class={icon}></span>
     {title}
   </span>
