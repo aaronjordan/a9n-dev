@@ -37,17 +37,17 @@ abbr,
 }
 
 a {
-  color: var(--yellow);
+  color: var(--content);
+  color: color-mix(in lch, var(--yellow), var(--content-high));
 
-  &:visited:not(header *) {
+  /* &:visited:not(header *) {
     color: var(--content-low);
     color: color-mix(in lch, var(--yellow), var(--content-low) 75%);
-  }
+  } */
 
   &:hover,
   &:focus-visible {
-    color: var(--content);
-    color: color-mix(in lch, var(--yellow), var(--content-high));
+    color: var(--yellow);
   }
 }
 

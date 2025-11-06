@@ -69,6 +69,7 @@ blockquote > footer > cite {
   box-shadow:
     0 6px 12px -6px #0003,
     81px 0 54px -54px color-mix(in lch, var(--accent) 20%, transparent) inset;
+  padding-right: --spacing(2);
 
   & > p:not(.markdown-alert-title, :last-child) {
     margin-bottom: --spacing(2);
@@ -80,7 +81,7 @@ blockquote > footer > cite {
   align-items: center;
   gap: --spacing(2);
   font-weight: 600;
-  text-shadow: 0 0 12px color-mix(in lch, var(--accent) 20%, transparent);
+  text-shadow: 0 0 24px color-mix(in lch, var(--accent) 20%, transparent);
 
   & svg {
     fill: var(--accent);

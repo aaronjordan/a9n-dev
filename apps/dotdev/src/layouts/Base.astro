@@ -14,6 +14,8 @@ const { pageTitle, routeTitle } = Astro.props;
 const siteTitle = "Aaron Jordan";
 
 const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
+
+// .app-root is a workaround for a Safari CSS var color bug...
 ---
 
 <html lang="en">
@@ -41,7 +43,6 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
     </script>
   </head>
   <body>
-    <!-- .app-root is a workaround for a Safari CSS var color bug... -->
     <div class="app-root min-h-full transition-colors">
       <Header />
       <slot />
