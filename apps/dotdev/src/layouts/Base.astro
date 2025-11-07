@@ -41,6 +41,7 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
           document.querySelector(themeIcon).classList.value = map.icon;
         };
         document.addEventListener("readystatechange", cb, { once: true });
+        document.addEventListener("astro:after-swap", cb);
       }
     </script>
   </head>
@@ -67,9 +68,9 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
     return doc.body.querySelector(".app-root > main")!;
   }
 
-  function appendable(doc: Document) {
+  function swap(doc: Document) {
     swapFunctions.deselectScripts(doc);
-    swapFunctions.swapRootAttributes(doc);
+    // swapFunctions.swapRootAttributes(doc); // disabled for color theme
     swapFunctions.swapHeadElements(doc);
     const _new = selectMain(doc);
     const _old = selectMain(document);
@@ -77,6 +78,6 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
   }
 
   document.addEventListener("astro:before-swap", (event) => {
-    event.swap = () => appendable(event.newDocument);
+    event.swap = () => swap(event.newDocument);
   });
 </script>
