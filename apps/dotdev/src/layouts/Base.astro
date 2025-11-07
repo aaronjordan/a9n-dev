@@ -74,7 +74,9 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
     swapFunctions.swapHeadElements(doc);
     const _new = selectMain(doc);
     const _old = selectMain(document);
+    const restoreFocusFunction = swapFunctions.saveFocus();
     _old.parentElement!.replaceChild(_new, _old);
+    restoreFocusFunction();
   }
 
   document.addEventListener("astro:before-swap", (event) => {
