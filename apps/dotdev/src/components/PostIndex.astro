@@ -30,11 +30,11 @@ function getDatestamp(post: Post) {
 <ul class="u space-y-2">
   {
     posts.map((post) => (
-      <li class="relative flex items-center gap-4">
+      <li class="relative grid grid-cols-[auto_auto_1fr] items-start gap-4">
         <time class="font-light" datetime={post.data.pubDate.toISOString()}>
           {getDatestamp(post)}
         </time>
-        <span class="h-3 border-l border-frame-low" />
+        <span class="mt-[0.575rem] h-2.5 border-l border-frame-low" />
         <a class="font-semibold" href={href(post)}>
           {post.data.title}
         </a>
