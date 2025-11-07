@@ -12,7 +12,11 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<Column routeTitle="Notebook" pageTitle={post.data.title}>
+<Column 
+  routeTitle="Notebook" 
+  pageTitle={post.data.title}
+  description={post.data.subtitle}
+>
   <PostTitle title={post.data.title} subtitle={post.data.subtitle} />
   <Content />
 </Column>

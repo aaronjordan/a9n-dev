@@ -6,7 +6,7 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("snippets");
 ---
 
-<Column routeTitle="Notebook">
+<Column routeTitle="Snippets" description="">
   <h1>Snippets</h1>
   <PostIndex {posts} />
 </Column>

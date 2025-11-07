@@ -6,7 +6,7 @@ import PostIndex from "../../components/PostIndex.astro";
 const posts = await getCollection("notebooks");
 ---
 
-<Column routeTitle="Notebook">
+<Column routeTitle="Notebook" description="">
   <h1>Notebook</h1>
   <PostIndex {posts} />
 </Column>

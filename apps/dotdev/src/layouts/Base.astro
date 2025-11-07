@@ -10,28 +10,22 @@ import "../styles/global.css";
 interface Props {
   pageTitle?: string;
   routeTitle: string;
+  description?: string;
 }
 
-const { pageTitle, routeTitle } = Astro.props;
+const { pageTitle, routeTitle, description } = Astro.props;
 const siteTitle = "Aaron Jordan";
 const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
+const defaultDescription =
+  "Hey there! I build software that delights users and empowers developers.";
+const pageDescription = description ?? defaultDescription;
+
+const ogImageRoute = Astro.url.pathname.replace(/^\//, "").replace(/\/$/, "") || "index";
+const ogImageUrl = new URL(`/og/${ogImageRoute}.png`, Astro.site);
 
 // .app-root is a workaround for a Safari CSS var color bug...
 ---
 
-<!-- 
-      openGraph={{
-        basic: {
-          title: title,
-          type: "website",
-          image: ogImageUrl,
-          url,
-        },
-        optional: {
-          siteName: "a9n.dev",
-        },
-      }}
--->
 <html lang="en">
   <head>
     <ClientRouter />
@@ -41,8 +35,20 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
     <meta name="generator" content={Astro.generator} />
     <SEO
       title={title}
-      description="Hey there! I build software that delights users and empowers developers."
+      description={pageDescription}
       twitter={{ creator: "@aaronjordandev" }}
+      openGraph={{
+        basic: {
+          title: title,
+          type: "website",
+          image: ogImageUrl.href,
+          url: Astro.url.href,
+        },
+        optional: {
+          siteName: "a9n.dev",
+          description: pageDescription,
+        },
+      }}
     />
     <title>{title}</title>
     <script is:inline>
