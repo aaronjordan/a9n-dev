@@ -54,8 +54,8 @@ export const { getStaticPaths, GET } = OGImageRoute({
     title,
     description,
     bgGradient: [
+      [249, 245, 215],
       [251, 241, 199],
-      [242, 229, 188],
     ],
     border: { color: [215, 153, 33], width: 40 },
     padding: 80,
