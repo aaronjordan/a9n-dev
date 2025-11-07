@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import { SEO } from "astro-seo";
 import "@fontsource/google-sans-code/400.css";
 import "@fontsource/google-sans-code/600.css";
 
@@ -13,12 +14,24 @@ interface Props {
 
 const { pageTitle, routeTitle } = Astro.props;
 const siteTitle = "Aaron Jordan";
-
 const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
 
 // .app-root is a workaround for a Safari CSS var color bug...
 ---
 
+<!-- 
+      openGraph={{
+        basic: {
+          title: title,
+          type: "website",
+          image: ogImageUrl,
+          url,
+        },
+        optional: {
+          siteName: "a9n.dev",
+        },
+      }}
+-->
 <html lang="en">
   <head>
     <ClientRouter />
@@ -26,6 +39,11 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <SEO
+      title={title}
+      description="Hey there! I build software that delights users and empowers developers."
+      twitter={{ creator: "@aaronjordandev" }}
+    />
     <title>{title}</title>
     <script is:inline>
       const t = localStorage.getItem("t");

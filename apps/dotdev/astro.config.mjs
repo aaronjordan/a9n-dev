@@ -9,6 +9,7 @@ import remarkGfm from "remark-gfm";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://a9n.dev",
   integrations: [mdx()],
 
   markdown: {
