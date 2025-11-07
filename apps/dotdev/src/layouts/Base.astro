@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import "@fontsource/google-sans-code/400.css";
 import "@fontsource/google-sans-code/600.css";
 
@@ -20,6 +21,7 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
 
 <html lang="en">
   <head>
+    <ClientRouter />
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
@@ -57,3 +59,24 @@ const title = [routeTitle, pageTitle, siteTitle].filter(Boolean).join(" - ");
     </div>
   </body>
 </html>
+
+<script>
+  import { swapFunctions } from "astro:transitions/client";
+
+  function selectMain(doc: Document): HTMLElement {
+    return doc.body.querySelector(".app-root > main")!;
+  }
+
+  function appendable(doc: Document) {
+    swapFunctions.deselectScripts(doc);
+    swapFunctions.swapRootAttributes(doc);
+    swapFunctions.swapHeadElements(doc);
+    const _new = selectMain(doc);
+    const _old = selectMain(document);
+    _old.parentElement!.replaceChild(_new, _old);
+  }
+
+  document.addEventListener("astro:before-swap", (event) => {
+    event.swap = () => appendable(event.newDocument);
+  });
+</script>
