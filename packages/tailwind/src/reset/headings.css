@@ -3,7 +3,7 @@ h1 {
   font-size: var(--size);
   font-weight: 250;
   letter-spacing: -0.033rem;
-  line-height: calc(2 / 1.66); /* TODO, check should change these? others ok */
+  line-height: calc(2.5 / 1.66);
   scroll-margin-top: --spacing(10);
 }
 h2 {
@@ -45,22 +45,20 @@ hgroup > :last-child {
   font-size: var(--size);
   font-style: oblique 7.5deg;
   color: var(--content-low);
+  opacity: 0.8; /* TODO: use real color */
 }
 
 @media screen and (min-width: 800px) {
   h1 {
     --size: 2rem;
-    font-size: var(--size);
     line-height: calc(2 / 1.66);
   }
   h2 {
     --size: 1.66rem;
-    font-size: var(--size);
     line-height: calc(1.67 / 1.33);
   }
   h3 {
     --size: 1.33rem;
-    font-size: var(--size);
     font-weight: 525;
     line-height: 1.33;
   }
@@ -71,21 +69,15 @@ hgroup > :last-child {
   }
   h4 {
     --size: 1.167rem;
-    font-size: var(--size);
   }
   h5 {
     --size: 1rem;
-    font-size: var(--size);
   }
   h6 {
     --size: 0.9rem;
-    font-size: var(--size);
   }
 
   hgroup > :last-child {
     --size: 1.1rem;
-    font-size: var(--size);
-    font-style: oblique 7.5deg;
-    opacity: 0.8; /* TODO: use real color always */
   }
 }

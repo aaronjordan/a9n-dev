@@ -37,8 +37,9 @@ abbr,
 }
 
 a {
-  color: var(--content);
-  color: color-mix(in lch, var(--yellow), var(--content-high));
+  color: var(--content-low);
+  transition: color 400ms ease-out;
+  /* color: color-mix(in lch, var(--yellow), var(--content-high)); */
 
   /* &:visited:not(header *) {
     color: var(--content-low);
@@ -48,6 +49,7 @@ a {
   &:hover,
   &:focus-visible {
     color: var(--yellow);
+    transition-duration: 150ms;
   }
 }
 
