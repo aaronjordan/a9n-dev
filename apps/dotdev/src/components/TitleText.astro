@@ -1,9 +1,10 @@
----
-// const start = "aaronjordan";
-// const target = "a9n";
----
+<span id="t1" class="text-[1.325rem] font-medium font-sans tracking-wide">
+  a9n.dev
+</span>
 
-<!-- <noscript>
-  <span class="text-[1.325rem] font-medium font-sans">a9n</span>.dev
-</noscript> -->
-<span class="text-[1.325rem] font-medium font-sans">a9n</span>.dev
+<script is:inline>
+  const H = ["a9n.dev", "aaronjordan.dev"];
+  const d = document.getElementById("t1");
+  const n = window.location.hostname;
+  if (n !== d.innerText && H.includes(n)) d.innerText = name;
+</script>

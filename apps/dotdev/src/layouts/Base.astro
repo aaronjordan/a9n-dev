@@ -20,7 +20,8 @@ const defaultDescription =
   "Hey there! I build software that delights users and empowers developers.";
 const pageDescription = description ?? defaultDescription;
 
-const ogImageRoute = Astro.url.pathname.replace(/^\//, "").replace(/\/$/, "") || "index";
+const ogImageRoute =
+  Astro.url.pathname.replace(/^\//, "").replace(/\/$/, "") || "index";
 const ogImageUrl = new URL(`/og/${ogImageRoute}.png`, Astro.site);
 
 // .app-root is a workaround for a Safari CSS var color bug...
@@ -50,7 +51,6 @@ const ogImageUrl = new URL(`/og/${ogImageRoute}.png`, Astro.site);
         },
       }}
     />
-    <title>{title}</title>
     <script is:inline>
       const t = localStorage.getItem("t");
       const maps = {
