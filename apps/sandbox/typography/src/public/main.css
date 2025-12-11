@@ -1,27 +1,27 @@
-@import "/public/gruv.css";
+@import "/public/flexoki.css";
 @import "/public/tailwind.css";
 
-/* gruv theme / dark */
+/* Flexoki theme / dark */
 :root {
-  --content-low: var(--gb-light2);
-  --content: var(--gb-light1);
-  --content-high: var(--gb-light0);
-  --frame-high: var(--gb-dark4);
-  --frame: var(--gb-dark3);
-  --frame-low: var(--gb-dark2);
-  --surface-low: var(--gb-dark0);
-  --surface: color-mix(in srgb, var(--gb-dark0), var(--gb-dark1));
-  --surface-high: var(--gb-dark1);
+  --content-low: var(--flexoki-200);
+  --content: var(--flexoki-100);
+  --content-high: var(--flexoki-50);
+  --frame-high: var(--flexoki-600);
+  --frame: var(--flexoki-700);
+  --frame-low: var(--flexoki-800);
+  --surface-low: var(--flexoki-black);
+  --surface: color-mix(in srgb, var(--flexoki-black), var(--flexoki-950));
+  --surface-high: var(--flexoki-950);
 
-  --highlight: color-mix(in lch, var(--gb-faded-yellow) 40%, transparent);
-  --selection: color-mix(in lch, var(--gb-neutral-orange) 40%, transparent);
+  --highlight: color-mix(in lch, var(--flexoki-yellow-600) 40%, transparent);
+  --selection: color-mix(in lch, var(--flexoki-orange-600) 40%, transparent);
 
-  --blue: var(--gb-neutral-blue);
-  --green: var(--gb-neutral-green);
-  --yellow: var(--gb-neutral-yellow);
-  --orange: var(--gb-neutral-orange);
-  --red: var(--gb-neutral-red);
-  --purple: var(--gb-neutral-purple);
+  --blue: var(--flexoki-blue-400);
+  --green: var(--flexoki-green-400);
+  --yellow: var(--flexoki-yellow-400);
+  --orange: var(--flexoki-orange-400);
+  --red: var(--flexoki-red-400);
+  --purple: var(--flexoki-purple-400);
 }
 
 body {
