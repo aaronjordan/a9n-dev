@@ -1,0 +1,52 @@
+:root {
+  /* Base Colors */
+  --flexoki-black: #100F0F;
+  --flexoki-paper: #FFFCF0;
+
+  /* Grayscale */
+  --flexoki-50: #F2F0E5;
+  --flexoki-100: #E6E4D9;
+  --flexoki-150: #DAD8CE;
+  --flexoki-200: #CECDC3;
+  --flexoki-300: #B7B5AC;
+  --flexoki-400: #9F9D96;
+  --flexoki-500: #878580;
+  --flexoki-600: #6F6E69;
+  --flexoki-700: #575653;
+  --flexoki-800: #403E3C;
+  --flexoki-850: #343331;
+  --flexoki-900: #282726;
+  --flexoki-950: #1C1B1A;
+
+  /* Red */
+  --flexoki-red-400: #D14D41;
+  --flexoki-red-600: #AF3029;
+
+  /* Orange */
+  --flexoki-orange-400: #DA702C;
+  --flexoki-orange-600: #BC5215;
+
+  /* Yellow */
+  --flexoki-yellow-400: #D0A215;
+  --flexoki-yellow-600: #AD8301;
+
+  /* Green */
+  --flexoki-green-400: #879A39;
+  --flexoki-green-600: #66800B;
+
+  /* Cyan */
+  --flexoki-cyan-400: #3AA99F;
+  --flexoki-cyan-600: #24837B;
+
+  /* Blue */
+  --flexoki-blue-400: #4385BE;
+  --flexoki-blue-600: #205EA6;
+
+  /* Purple */
+  --flexoki-purple-400: #8B7EC8;
+  --flexoki-purple-600: #5E409D;
+
+  /* Magenta */
+  --flexoki-magenta-400: #CE5D97;
+  --flexoki-magenta-600: #A02F6F;
+}
