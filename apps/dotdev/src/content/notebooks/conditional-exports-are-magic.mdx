@@ -1,0 +1,140 @@
+---
+title: JS Conditional Exports are Magic
+subtitle: How did I get this far without them?
+pubDate: 2025-12-22
+---
+
+I've been developing applications on the web full-time since 2020 and through college coursework even earlier, but only now am really beginning to see the true potential of structured exports from `package.json`. Let's dive into what they are and how you can put them to work for you in any JavaScript project.
+
+## Exporting a Module
+
+The [Node.js documentation on Package Entry Points](https://nodejs.org/docs/latest-v22.x/api/packages.html#package-entry-points) is thorough and contains a few key points:
+
+- The older `main` field marked the entrypoint of a package, but is less powerful than the newer `exports` key.
+- The `exports` field is supported by all current Node.js versions. [(It was introduced in 2019)](https://nodejs.org/en/blog/release/v12.7.0)
+- When a package defines `exports`, it is an **exhaustive** list of all possible entrypoints. With `main`, arbitrary internal files could be imported.
+- Entries in `exports` can use wildcards to allow access to groups of files.
+- There's a syntax for internal imports, which allows a package to import itself _while resolving conditions_.
+
+And _conditions_ are our focus for today. In my opinion, [Webpack](https://webpack.js.org/) has the best explainer for how this works.
+
+> Instead of providing results directly in the `exports` field, the package author may let the module system choose one based on conditions about the environment.
+>
+> In this case an object mapping conditions to results should be used. Conditions are tried in object order. Conditions that contain invalid results are skipped. Conditions might be nested to create a logical AND. The last condition in the object might be the special `"default"` condition, which is always matched.
+>
+> [source](https://webpack.js.org/guides/package-exports/#conditional-syntax)
+
+A handful of conditions [are baked into](https://nodejs.org/docs/latest-v22.x/api/packages.html#conditional-exports) Node.js, some others are outlined as ["community conditions"](https://nodejs.org/docs/latest-v22.x/api/packages.html#community-conditions-definitions), and a separate list mapping alternate runtimes to their condition specifiers [is available too.](https://runtime-keys.proposal.wintercg.org/#intro) Beyond server-side runtimes, Webpack and Vite also support conditions for package resolution when performing builds, in which selections are independent from the conditions at runtime.
+
+## What This Enables
+
+Conditional exports allow writing code that is isomorphic to the caller, but provides different implementations based on the runtime. In this way, if the _same package_ is imported in `bun`, `deno`, or `node`, it could execute completely different runtime code!
+
+As a trivial example, a package with a quick `"hello world"` web server could match conditions to decide on which API to use:
+
+```jsonc
+{
+  "name": "hello-world-server",
+  "exports": {
+    ".": {
+      "types": "hello.d.ts", // TypeScript checks this
+      "bun": "hello.bun.ts", // Use Bun.serve
+      "deno": "hello.deno.ts", // Use Deno.serve
+      "node": "hello.node.ts", // Use `express`
+    },
+  },
+}
+```
+
+```ts
+// hello.bun.ts
+export function start() {
+  Bun.serve({ fetch: (req) => new Response("Hello, world!") });
+}
+```
+
+```ts
+// hello.deno.ts
+export function start() {
+  Deno.serve((req) => new Response("Hello, world!"));
+}
+```
+
+```ts
+// hello.node.ts
+import { createServer } from "node:http";
+
+export function start() {
+  const server = createServer((req, res) => {
+    res.send("Hello, world!");
+    res.end();
+  });
+  server.listen(3000);
+}
+```
+
+With this, we can safely access system globals in packages that support multiple runtimes without needing to check `typeof Bun !== undefined` or perform any other feature detection nonsense. We also end up bundling much less code than a runtime alternative by virtue of making the platform selection up front, then loading only relevant code.
+
+## So What Can I Match?
+
+Like much of the JavaScript landscape, while answers to this question seem obvious, they can end up being surprisingly nuanced. For instance, [Vercel's `edge-light` environment](https://vercel.com/docs/functions/runtimes/edge) claims to be `browser`.
+
+Fascinated by the oddities, [I created the `detect-conditions` package.](https://www.npmjs.com/package/detect-conditions) Pull it and check against your own runtimes if you're curious. It will validate against any of the conditions [in its implementation](https://github.com/aaronjordan/detect-conditions/blob/main/src/assert.ts#L30), which contains everything from the lists linked above.
+
+Want to see another condition added to the list? [Open a PR!](https://github.com/aaronjordan/detect-conditions)
+
+## Cool, but what about TypeScript?
+
+In the `package.json` sample above, you'll note a hand-rolled `d.ts` file. It's the best solution I've found so far to work with TypeScript in a situation using conditions. It gives a clear place to specify what _each module_ should provide, regardless of platform. TS will only resolve one set of `types` for an export using conditions, so the implementations must either be consistent or expressed by some sort of union.
+
+It's simplest to make and enforce a consistent interface, here's one way to do that for our simple example:
+
+```ts
+// hello.d.ts
+
+// 1. declare the functions in the module.
+export declare function start(): void;
+
+// 2. (optional) export a type if you'd like to use it to check implementations.
+export type StartFn = typeof start;
+```
+
+Afterward, we ensure consistency between the condition-driven implementations by writing a test. This is really just a bit of TypeScript gymnastics that prove that our implementations all reflect the type definition file, which in the example above is quite simple.
+
+```ts
+// hello.test.ts
+
+import type * as bun from "./hello.bun";
+import type * as deno from "./hello.deno";
+import type * as node from "./hello.node";
+import type * as base from "./hello";
+
+type Ok = "ok";
+
+type Implements<Shape, Base, Error extends string> = Shape extends Base
+  ? Ok
+  : Error;
+
+type IsValidModule<ImplementsUnion extends string> =
+  Exclude<ImplementsUnion, Ok> extends never
+    ? "implements check"
+    : `${Exclude<ImplementsUnion, Ok>} base`;
+
+type Module = typeof base;
+type CheckAll =
+  | Implements<typeof bun, Module, "bun">
+  | Implements<typeof deno, Module, "deno">
+  | Implements<typeof node, Module, "node">;
+
+"implements check" satisfies IsValidModule<CheckAll>;
+```
+
+If this is a pattern you'd like to use in a few places, it could be wise to put the `Implements` and `IsValidModule` types in their own utility file. The only bits specific to checking this module are the imports, the `Module` type, and the `CheckAll` union, which should list all the condition implementations. Import each with `* as someName` and list them as implementing the shape from our `d.ts` file.
+
+The final `satisfies` check is where the assertion actually happens and it will look about the same regardless of where it's used.
+
+---
+
+I have found it really handy to be able to do this switching, especially lately as I've been developing within a monorepo that includes both client and server packages. The flexibility to safely dip into server libraries without worrying about mocking them out or poisoning every file with `import "server-only"` has been a happier path forward and enabled some pretty neat patterns. I look forward to sharing one related to [Supabase](https://supabase.com) clients in a future update.
+
+For now though, have a very merry Christmas. 🎄
