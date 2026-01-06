@@ -20,6 +20,9 @@ body {
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "ss01" 1;
+  scrollbar-gutter: stable;
+  scrollbar-gutter: stable both-edges;
+  scrollbar-color: var(--frame-low) var(--surface);
 }
 
 h1,
