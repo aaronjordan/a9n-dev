@@ -14,6 +14,10 @@ const posts = Astro.props.posts.toSorted(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
+const postsByYear = Map.groupBy(posts, (post) =>
+  post.data.pubDate.getFullYear()
+);
+
 function href(post: Post) {
   return `${Astro.routePattern}/${post.id}`;
 }
@@ -26,22 +30,28 @@ function getDatestamp(post: Post) {
 }
 ---
 
-<p class="year-marker flex gap-[19px] text-xl">2025</p>
-<ul class="u space-y-2">
-  {
-    posts.map((post) => (
-      <li class="relative grid grid-cols-[auto_auto_1fr] items-start gap-4">
-        <time class="font-light" datetime={post.data.pubDate.toISOString()}>
-          {getDatestamp(post)}
-        </time>
-        <span class="mt-[0.575rem] h-2.5 border-l border-frame-low" />
-        <a class="font-semibold" href={href(post)}>
-          {post.data.title}
-        </a>
-      </li>
-    ))
-  }
-</ul>
+{
+  [...postsByYear].map(([year, yearPosts]) => (
+    <>
+      <h2 class="year-marker flex gap-[19px] text-xl">
+        <span class="sr-only">Posts in </span>{year}
+      </h2>
+      <ul class="u space-y-2">
+        {yearPosts.map((post) => (
+          <li class="relative grid grid-cols-[auto_auto_1fr] items-start gap-4">
+            <time class="font-light" datetime={post.data.pubDate.toISOString()}>
+              {getDatestamp(post)}
+            </time>
+            <span class="mt-[0.575rem] h-2.5 border-l border-frame-low" />
+            <a class="font-semibold" href={href(post)}>
+              {post.data.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
+  ))
+}
 
 <style>
   .year-marker::after {
