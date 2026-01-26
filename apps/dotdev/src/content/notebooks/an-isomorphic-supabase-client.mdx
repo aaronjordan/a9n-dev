@@ -154,7 +154,7 @@ INSERT INTO order_drinks (order_id, drink_id, size, quantity, unit_price) VALUES
     (10, 6, 'medium', 1, 4.00); -- Max returns for another cold brew
 ```
 
-If you're unfamiliar with SQL, hopefully the comments above are helpful. For the record, I don't think being a SQL hero is really necessary for the rest of this guide.
+If you're unfamiliar with SQL, hopefully the comments above are helpful. For the record, I don't think being a SQL hero is really necessary for the rest of this guide. [To be transparent, I generated the seed data.](https://github.com/aaronjordan/a9n-dev/blob/main/demos/isomorphic-supabase-client/supabase/seed.opencode.md?plain=1)
 
 Continuing, we can apply this schema and seed the database with the Supabase CLI.
 
@@ -253,11 +253,11 @@ Keeping the server and client implementations of the Supabase SDK isolated to th
 
 ### A bit more setup
 
-We can build out a simple dashboard to make this distinction tangible. I'm adding this Table component with `bunx shadcn add table`, then chatting with OpenCode.
+We can build out a simple dashboard to make this distinction tangible. I'm adding [this Table component](https://ui.shadcn.com/docs/components/base/table) with `bunx shadcn add table`, [then chatting with OpenCode](https://github.com/aaronjordan/a9n-dev/blob/main/demos/isomorphic-supabase-client/app/page.opencode.md?plain=1).
 
 <img alt="Screenshot of table component with recent orders" src="/notebook-media/260125-sb-table.png" />
 
-I'll also create an editor to allow us to change details of an order that already exists. Similarly, I'm throwing the task at OpenCode.
+I'll also create an editor to allow us to change details of an order that already exists. Similarly, [I'm throwing the task at OpenCode.](https://github.com/aaronjordan/a9n-dev/blob/main/demos/isomorphic-supabase-client/app/page-editor.opencode.md?plain=1)
 
 <img alt="Screenshot of order editor popup component" src="/notebook-media/260125-sb-editor.png" />
 
@@ -394,5 +394,7 @@ Should you work in a monorepo, you could even include this as part of a package'
 I think a lot about packaging.
 
 The interfaces we choose to share from modules are important. After all, [every observable behavior of your product will eventually become someone's critical dependency](https://www.hyrumslaw.com/). Being intentional in choosing `exports` is a great way to limit your API surface and the number of observable-and-dependable-and-*breakable* features you provide callers.
+
+[The complete code for this demo is available on GitHub.](https://github.com/aaronjordan/a9n-dev/tree/main/demos/isomorphic-supabase-client)
 
 Next time you need to juggle multiple platforms, see if this fits!
