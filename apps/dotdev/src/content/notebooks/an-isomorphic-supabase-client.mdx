@@ -5,3 +5,394 @@ subtitle: Part 2 of the dive into conditional exports
 ---
 
 import TableOfContents from "../../components/TableOfContents.astro";
+
+Piecing this all together, we can make [Supabase's JavaScript SDK](https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=package-manager&package-manager=npm&queryGroups=framework&framework=nextjs) easier to use with *any* fullstack framework where we need [support for client and server-side rendering.](https://developer.mozilla.org/en-US/docs/Glossary/SSR) Some platforms provide [their own environment-specific functions](https://tanstack.com/start/latest/docs/framework/react/guide/environment-functions#isomorphic-functions), but this solution works the same way **everywhere**. Of course, this is made possible through [runtime conditions, which we previously covered.](./conditional-exports-are-magic)
+
+Let's walk through an example of configuring the SDK for isomorphic usage in [Next.js](https://nextjs.org/docs), a platform that does not natively provide isomorphic bindings at the time of writing.
+
+<TableOfContents headings={getHeadings()} />
+
+## Scaffolding the Project
+
+Going from zero to one is pretty easy. There's a great `with-supabase` template available for `create-next-app` that is a decent starting point. I'll use [Bun](https://bun.sh/) to clone the template and install dependencies.
+
+```bash
+mkdir ismorphic-supabase-client; cd isomorphic-supabase-client;
+
+bunx create-next-app -e with-supabase .
+  # or your preferred package manager npx/pnpx/...
+```
+
+If that goes well, you should see something like:
+
+```log
+Success! Created isomorphic-supabase-client at /Users/.../isomorphic-supabase-client
+```
+
+At that point, run `bun dev` to see this site in action.
+
+<img alt="Screenshot of Next.js with Supabase example website" src="/notebook-media/260125-sb-create.png" />
+
+### Setting up the DB
+
+I'll use [the Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) to create a local database to experiment with. Alternately, you could follow the directions in the page template to create a cloud project. Perhaps that's preferable if you can't or don't want to configure [Docker](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/). That said, this guide will focus on local directions, keeping configuration as code rather than buttons to press on a dashboard. From the project folder:
+
+```sh
+supabase init
+
+# Generate VS Code settings for Deno? [y/N] n
+# Generate IntelliJ Settings for Deno? [y/N] n
+# Finished supabase init.
+
+supabase start
+
+# Starting database...
+# Initialising schema...
+# Seeding globals from roles.sql...
+# WARN: no files matched pattern: supabase/seed.sql
+# Starting containers...
+# Waiting for health checks...
+# Started supabase local development setup.
+# 
+#          API URL: http://127.0.0.1:54321
+#      GraphQL URL: http://127.0.0.1:54321/graphql/v1
+#   S3 Storage URL: http://127.0.0.1:54321/storage/v1/s3
+#          MCP URL: http://127.0.0.1:54321/mcp
+#     Database URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+#       Studio URL: http://127.0.0.1:54323
+#      Mailpit URL: http://127.0.0.1:54324
+#  Publishable key: sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH
+#       Secret key: sb_secret_<SUPER_SECRET_KEY>
+#    S3 Access Key: 625729a08b95bf1b7ff351a663f3a23c
+#    S3 Secret Key: <SUPER_SECRET_KEY>
+#        S3 Region: local
+```
+
+Once we have the DB up, let's save a couple variables from that output that we'll need later to configure the SDK. You can create `.env.local` yourself or copy `.env.example` as a starting point.
+
+```sh
+# .env.local
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH
+```
+
+After this initial creation, let's [add a table](https://supabase.com/docs/guides/local-development/declarative-database-schemas) and [seed some data](https://supabase.com/docs/guides/local-development/seeding-your-database) to work with.
+
+```sql
+-- supabase/schema/orders.sql
+
+create type size as enum ('small', 'medium', 'large');
+create type order_status as enum ('pending', 'completed', 'cancelled');
+
+-- drink: mocha latte, $4.50
+create table drinks (
+    "id" serial primary key,
+    "name" text not null,
+    "base_price" float not null
+);
+
+-- order: arthur, pending, 5 minutes ago
+create table orders (
+    "id" serial primary key,
+    "name" text not null,
+    "status" order_status not null default 'pending',
+    "created_at" timestamptz not null default now()
+);
+
+-- order_drinks:
+--   on order(name: arthur),
+--   1x medium drink(name: mocha latte),
+--   arthur paid $5.00
+create table order_drinks (
+    "id" serial primary key,
+    "order_id" int not null references orders on delete cascade,
+    "drink_id" int not null references drinks on delete cascade,
+    "size" size not null,
+    "quantity" int not null default 1 check (quantity > 0),
+    "unit_price" float
+);
+```
+
+```sql
+-- supabase/seed.sql
+-- Insert drinks menu
+INSERT INTO drinks (name, base_price) VALUES
+    ('Drip Coffee', 3.00),
+    ('Cortado', 3.75),
+    ('Cappuccino', 4.00),
+    ('Latte', 4.50),
+    ('Mocha', 4.50),
+    ('Cold Brew', 4.00),
+    ('Water Cup', 0.00);
+
+-- 8 unique customers, 10 orders total (Lewis and Max came back)
+INSERT INTO orders (name, status, created_at) VALUES
+    ('Lewis', 'completed', '2026-01-24 09:12:00-05'),
+    ('Max', 'completed', '2026-01-24 09:14:30-05'),
+    ('Charles', 'completed', '2026-01-24 09:17:15-05'),
+    ('Lando', 'completed', '2026-01-24 09:21:00-05'),
+    ('Carlos', 'completed', '2026-01-24 09:24:45-05'),
+    ('Oscar', 'completed', '2026-01-24 09:28:00-05'),
+    ('Lewis', 'completed', '2026-01-24 09:31:30-05'), 
+    ('George', 'completed', '2026-01-24 09:35:00-05'),
+    ('Fernando', 'pending', '2026-01-24 09:38:15-05'),
+    ('Max', 'pending', '2026-01-24 09:41:00-05');
+
+-- Insert order_drinks
+INSERT INTO order_drinks (order_id, drink_id, size, quantity, unit_price) VALUES
+    (1, 4, 'large', 1, 4.50),   -- Lewis - morning latte
+    (2, 6, 'large', 1, 4.00),   -- Max - cold brew to start the day
+    (3, 2, 'small', 1, 3.75),   -- Charles - cortado, keeping it classic
+    (4, 3, 'medium', 1, 4.00),  -- Lando - cappuccino
+    (4, 1, 'medium', 1, 3.00),  --       - drip for a friend
+    (5, 5, 'large', 1, 4.50),   -- Carlos - mocha guy
+    (6, 1, 'large', 2, 3.00),   -- Oscar - double drip coffee morning
+    (7, 7, 'small', 1, 0.00),   -- Lewis returns - just a water cup
+    (8, 4, 'medium', 1, 4.50),  -- George - latte
+    (8, 2, 'small', 1, 3.75),   --        - cortado
+    (9, 5, 'medium', 1, 4.50),  -- Fernando - still making his mocha
+    (10, 6, 'medium', 1, 4.00); -- Max returns for another cold brew
+```
+
+If you're unfamiliar with SQL, hopefully the comments above are helpful. For the record, I don't think being a SQL hero is really necessary for the rest of this guide.
+
+Continuing, we can apply this schema and seed the database with the Supabase CLI.
+
+```sh
+supabase db diff -f create_orders_table && \
+  supabase migration up && \
+  supabase db reset
+
+# Creating shadow database...
+# Initialising schema...
+# Seeding globals from roles.sql...
+# Creating local database from declarative schemas:
+#  • supabase/schemas/orders.sql
+# Seeding globals from orders.sql...
+# Diffing schemas...
+# Finished supabase db diff on branch main.
+# 
+# WARNING: The diff tool is not foolproof, so you may need to manually rearrange and modify the generated migration.
+# Run supabase db reset to verify that the new migration does not generate errors.
+# Connecting to local database...
+# Applying migration 20260125221054_create_orders_table.sql...
+# Local database is up to date.
+# Resetting local database...
+# Recreating database...
+# Initialising schema...
+# Seeding globals from roles.sql...
+# Applying migration 20260125221054_create_orders_table.sql...
+# Seeding data from supabase/seed.sql...
+# Restarting containers...
+# Finished supabase db reset on branch main.
+```
+
+Now, if we visit the local Studio URL, we can see this schema and initial data is rolled out. By default, that should run on port `54323`.
+
+<img alt="Screenshot of Supabase Studio with seeded data of the Orders table" src="/notebook-media/260125-sb-seed.png" />
+
+If you see that, congrats! You have a backend.
+
+### (optional) Generating TypeScript types for the DB
+
+This step is optional, but I'd highly recommend it if you're working with TypeScript. Out of the box, the Supabase JS SDK types everything from your DB's primary schema as `any`, which is certain to cause you grief as the system grows. The CLI can easily generate a TypeScript schema and this should be done again every time you adjust the table schemas.
+
+To make it easy, let's add a script to `package.json`.
+
+```jsonc
+{
+  // ...
+  "scripts": {
+    "dev": "next dev",
+    "db:generate-types": "supabase gen types --local > lib/supabase/db.types.ts",
+    // ...
+  }
+  // ...
+}
+```
+
+Running it with `bun db:generate-types` will create a `ts` file we can hand off to our Supabase JS clients, which is trivial. Add the type import and generic argument to the neighboring client and server files from the `with-supabase` template.
+
+```ts
+// lib/supabase/client.ts
+import { createBrowserClient } from "@supabase/ssr";
+import type { Database } from "./db.types";
+
+export function createClient() {
+	return createBrowserClient<Database>(
+		process.env.NEXT_PUBLIC_SUPABASE_URL!,
+		process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+	);
+}
+```
+
+```ts
+// lib/supabase/server.ts
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import type { Database } from "./db.types";
+
+export async function createClient() {
+  const cookieStore = await cookies();
+
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    { /* ... */ },
+  );
+}
+```
+
+Now, calls to SDK methods like `client.from("orders").select("*")` will return strongly-typed objects that reflect the shape of the database. This is dramatically better for you, your teammates, and your AI agents.
+
+<img alt="Screenshot of code editor with inline suggestions based on database schema types" src="/notebook-media/260125-sb-typed.png" />
+
+## The Problem
+
+Keeping the server and client implementations of the Supabase SDK isolated to their proper environments is critical to their use. At the outset, this isn't an issue. After all, both functions return the same `SupabaseClient` object, so interactions flow the same way. Getting or updating data in tables, whether done through the client or server import, has the same semantics.
+
+### A bit more setup
+
+We can build out a simple dashboard to make this distinction tangible. I'm adding this Table component with `bunx shadcn add table`, then chatting with OpenCode.
+
+<img alt="Screenshot of table component with recent orders" src="/notebook-media/260125-sb-table.png" />
+
+I'll also create an editor to allow us to change details of an order that already exists. Similarly, I'm throwing the task at OpenCode.
+
+<img alt="Screenshot of order editor popup component" src="/notebook-media/260125-sb-editor.png" />
+
+### This is where it gets annoying 
+
+With the boilerplate out of the way, we can introduce a feature that highlights the issue with requiring different `SupabaseClient` creators.
+
+Let's suppose the drink menu changes regularly. Realistically, this might be different options based on time of day, but for our purposes, let's just add a manual refresh button in the editor. Clicking it will reload the drinks list and swap out the options in the dropdown.
+
+I'll add a custom hook to encapsulate this logic, taking the initial items from the caller and surfacing a method to refresh. It looks like this:
+
+```ts
+import { useCallback, useRef, useState } from "react";
+import { type Drink, getDrinks } from "../data/getDrinks";
+
+export function useDrinks(initialDrinks: Drink[]) {
+	const [drinks, setDrinks] = useState(initialDrinks);
+	const isRefreshing = useRef(false); // please use `@tanstack/react-query` IRL
+
+	const refresh = useCallback(async () => {
+		if (isRefreshing.current) return;
+		isRefreshing.current = true;
+
+		const res = await getDrinks();
+		if (!Array.isArray(res.drinks)) {
+			isRefreshing.current = false;
+			console.error("Failed to fetch drinks");
+			return;
+		}
+
+		isRefreshing.current = false;
+		setDrinks(res.drinks);
+	}, []);
+
+	return { all: drinks, refresh };
+}
+```
+
+Seems legit! However, after wiring it up to the frontend, this happens:
+
+```
+You're importing a component that needs "next/headers". That only works in a Server Component which is not supported in the pages/ directory. Read more: https://nextjs.org/docs/app/building-your-application/rendering/server-components
+
+Import traces:
+  #1 [Server Component]:
+    ./demos/isomorphic-supabase-client/lib/supabase/server.ts
+    ./demos/isomorphic-supabase-client/lib/data/updateOrder.ts
+
+  #2 [Server Component]:
+    ./demos/isomorphic-supabase-client/lib/supabase/server.ts
+    ./demos/isomorphic-supabase-client/lib/data/getDrinks.ts
+    ./demos/isomorphic-supabase-client/components/orders-table.tsx
+    ./demos/isomorphic-supabase-client/app/page.tsx
+```
+
+Yikes.
+
+It comes back around to our `getDrinks` function, which we're now trying to call from the client in the `useDrinks` hook and the server when rendering the table component. We're left with two options: 
+
+1. Repeat the declaration just to change out the import statement.
+2. Require or resolve the client at call time. 
+ 
+The first of these is fairly obvious, the second may look something like this:
+
+```ts
+export async function getDrinks(supabase: SupabaseClient<Database>): Promise<{
+  drinks: Drink[] | null;
+  error: Error | null;
+}> {
+  // const supabase = await createClient();
+  // ^ replaced with new parameter
+
+  const { data, error } = await supabase
+    .from("drinks")
+    .select("id, name, base_price")
+    .order("name");
+
+  // ...
+}
+```
+
+Both of these solutions feel a little gross. We want to do _the same operation_ with an instance of `SupabaseClient`, but we can't express this once due to the import statement's environment sensitivity. Duplicating the code outright would introduce a maintenance burden and risk. Accepting the client as a parameter moves the same problem up just one layer and could turn into [deep prop drilling](https://react.dev/learn/passing-data-deeply-with-context) in a more complex scenario. Ultimately, the `getDrinks` code can't really be isomorphic with these strategies. **But,** note that in this case the only thing that doesn't work in both client and server environments is the `createClient` call.
+
+I bet you see where this is going.
+
+## Solving with Conditions
+
+I'd argue that the simplest way we can differentiate environments when selecting the `createClient` function to use is through runtime conditions. We can use the internal `#` syntax to import the Supabase client, rather than directly getting the implementation from `server.ts` or `client.ts`. **This is all you really need:**
+
+```jsonc
+// package.json
+{
+  // ...
+  "imports": {
+		"#supabase": {
+			"react-server": "./lib/supabase/server.ts",
+			"default": "./lib/supabase/client.ts"
+		}
+	},
+	// ...
+}
+```
+
+After swapping out the import in `getDrinks` to use the runtime-resolved import, the compilation error should fall away.
+
+```ts
+import { createClient } from "#supabase";
+```
+
+For completeness, let's tighten a couple loose ends. The most important is to know that TypeScript will use the `types` condition to perform analysis on **all files.** We didn't provide one, so `default` is used. We'll need to fulfill the same interface in _all_ files sharing an import to safely pass typechecking, and only one of these `createClient` functions is `async`.
+
+Modify the `client.ts` file to make it `async`, which will match the type signature in `server.ts`. 
+
+```ts
+import { createBrowserClient } from "@supabase/ssr";
+import type { Database } from "./db.types";
+
+export async function createClient() {
+	return createBrowserClient<Database>(
+		process.env.NEXT_PUBLIC_SUPABASE_URL!,
+		process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+	);
+}
+```
+
+Afterward, go ahead and replace all the client imports throughout the project with this `#supabase` syntax. Consistency is good from the start, doubly so in an era of AI codegen. Whatever style you produce _will be amplified_ by agents as they contribute.
+
+Also, if you'd like stronger guarantees on consistency within your runtime-dependent packages, consider [this strategy from my previous post.](./conditional-exports-are-magic#cool-but-what-about-typescript) You _can_ get TypeScript to check these import variants, but doing so can get a little convoluted.
+
+Should you work in a monorepo, you could even include this as part of a package's `exports`, which is more in line with what NPM packages you import are using to achieve similar effects. The relevant configuration in such a package is about the same, just under the public `exports` key rather than internal package `imports` as shown above.
+
+---
+
+I think a lot about packaging.
+
+The interfaces we choose to share from modules are important. After all, [every observable behavior of your product will eventually become someone's critical dependency](https://www.hyrumslaw.com/). Being intentional in choosing `exports` is a great way to limit your API surface and the number of observable-and-dependable-and-*breakable* features you provide callers.
+
+Next time you need to juggle multiple platforms, see if this fits!
