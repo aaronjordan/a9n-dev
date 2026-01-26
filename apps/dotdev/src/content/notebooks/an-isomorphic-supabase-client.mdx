@@ -6,7 +6,7 @@ subtitle: Part 2 of the dive into conditional exports
 
 import TableOfContents from "../../components/TableOfContents.astro";
 
-Piecing this all together, we can make [Supabase's JavaScript SDK](https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=package-manager&package-manager=npm&queryGroups=framework&framework=nextjs) easier to use with *any* fullstack framework where we need [support for client and server-side rendering.](https://developer.mozilla.org/en-US/docs/Glossary/SSR) Some platforms provide [their own environment-specific functions](https://tanstack.com/start/latest/docs/framework/react/guide/environment-functions#isomorphic-functions), but this solution works the same way **everywhere**. Of course, this is made possible through [runtime conditions, which we previously covered.](./conditional-exports-are-magic)
+Piecing this all together, we can make [Supabase's JavaScript SDK](https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=package-manager&package-manager=npm&queryGroups=framework&framework=nextjs) easier to use with *any* fullstack framework where we need [support for client and server-side rendering.](https://developer.mozilla.org/en-US/docs/Glossary/SSR) Some platforms provide [their own environment-specific functions](https://tanstack.com/start/latest/docs/framework/react/guide/environment-functions#isomorphic-functions), but this solution works the same way **everywhere**. Of course, this is made possible through [runtime conditions, which we previously covered.](/notebooks/conditional-exports-are-magic)
 
 Let's walk through an example of configuring the SDK for isomorphic usage in [Next.js](https://nextjs.org/docs), a platform that does not natively provide isomorphic bindings at the time of writing.
 
@@ -17,7 +17,7 @@ Let's walk through an example of configuring the SDK for isomorphic usage in [Ne
 Going from zero to one is pretty easy. There's a great `with-supabase` template available for `create-next-app` that is a decent starting point. I'll use [Bun](https://bun.sh/) to clone the template and install dependencies.
 
 ```bash
-mkdir ismorphic-supabase-client; cd isomorphic-supabase-client;
+mkdir isomorphic-supabase-client; cd isomorphic-supabase-client;
 
 bunx create-next-app -e with-supabase .
   # or your preferred package manager npx/pnpx/...
@@ -339,7 +339,7 @@ export async function getDrinks(supabase: SupabaseClient<Database>): Promise<{
 }
 ```
 
-Both of these solutions feel a little gross. We want to do _the same operation_ with an instance of `SupabaseClient`, but we can't express this once due to the import statement's environment sensitivity. Duplicating the code outright would introduce a maintenance burden and risk. Accepting the client as a parameter moves the same problem up just one layer and could turn into [deep prop drilling](https://react.dev/learn/passing-data-deeply-with-context) in a more complex scenario. Ultimately, the `getDrinks` code can't really be isomorphic with these strategies. **But,** note that in this case the only thing that doesn't work in both client and server environments is the `createClient` call.
+Both solutions feel a little gross. We want to do _the same operation_ with an instance of `SupabaseClient`, but we can't express this once due to the import statement's environment sensitivity. Duplicating the code outright would introduce a maintenance burden and risk. Accepting the client as a parameter moves the same problem up just one layer and could turn into [deep prop drilling](https://react.dev/learn/passing-data-deeply-with-context) in a more complex scenario. Ultimately, the `getDrinks` code can't really be isomorphic with these strategies. **But,** note that in this case the only thing that doesn't work in both client and server environments is the `createClient` call.
 
 I bet you see where this is going.
 
@@ -361,7 +361,7 @@ I'd argue that the simplest way we can differentiate environments when selecting
 }
 ```
 
-After swapping out the import in `getDrinks` to use the runtime-resolved import, the compilation error should fall away.
+After swapping out the import in `getDrinks` to use the runtime-resolved import, the compilation error should fall away. We take advantage of the `react-server` condition [used by Next.js](https://runtime-keys.proposal.wintercg.org/#react-server) in this case to determine if we're on the server. For alternate tech stacks, perhaps you'd list [other conditions](https://runtime-keys.proposal.wintercg.org/#intro) like `node`, `bun`, or `workerd`.
 
 ```ts
 import { createClient } from "#supabase";
@@ -385,7 +385,7 @@ export async function createClient() {
 
 Afterward, go ahead and replace all the client imports throughout the project with this `#supabase` syntax. Consistency is good from the start, doubly so in an era of AI codegen. Whatever style you produce _will be amplified_ by agents as they contribute.
 
-Also, if you'd like stronger guarantees on consistency within your runtime-dependent packages, consider [this strategy from my previous post.](./conditional-exports-are-magic#cool-but-what-about-typescript) You _can_ get TypeScript to check these import variants, but doing so can get a little convoluted.
+Also, if you'd like stronger guarantees on consistency within your runtime-dependent packages, consider [this strategy from my previous post.](/notebooks/conditional-exports-are-magic#cool-but-what-about-typescript) You _can_ get TypeScript to check these import variants, but doing so can get a little convoluted.
 
 Should you work in a monorepo, you could even include this as part of a package's `exports`, which is more in line with what NPM packages you import are using to achieve similar effects. The relevant configuration in such a package is about the same, just under the public `exports` key rather than internal package `imports` as shown above.
 
