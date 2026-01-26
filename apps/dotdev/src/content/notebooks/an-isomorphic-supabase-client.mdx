@@ -31,7 +31,7 @@ Success! Created isomorphic-supabase-client at /Users/.../isomorphic-supabase-cl
 
 At that point, run `bun dev` to see this site in action.
 
-<img alt="Screenshot of Next.js with Supabase example website" src="/notebook-media/260125-sb-create.png" />
+![Screenshot of Next.js with Supabase example website](/notebook-media/260125-sb-create.png)
 
 ### Setting up the DB
 
@@ -189,7 +189,7 @@ supabase db diff -f create_orders_table && \
 
 Now, if we visit the local Studio URL, we can see this schema and initial data is rolled out. By default, that should run on port `54323`.
 
-<img alt="Screenshot of Supabase Studio with seeded data of the Orders table" src="/notebook-media/260125-sb-seed.png" />
+![Screenshot of Supabase Studio with seeded data of the Orders table](../../media/260125-sb-seed.png)
 
 If you see that, congrats! You have a backend.
 
@@ -245,7 +245,7 @@ export async function createClient() {
 
 Now, calls to SDK methods like `client.from("orders").select("*")` will return strongly-typed objects that reflect the shape of the database. This is dramatically better for you, your teammates, and your AI agents.
 
-<img alt="Screenshot of code editor with inline suggestions based on database schema types" src="/notebook-media/260125-sb-typed.png" />
+![Screenshot of code editor with inline suggestions based on database schema types](../../media/260125-sb-typed.png)
 
 ## The Problem
 
@@ -255,11 +255,11 @@ Keeping the server and client implementations of the Supabase SDK isolated to th
 
 We can build out a simple dashboard to make this distinction tangible. I'm adding [this Table component](https://ui.shadcn.com/docs/components/base/table) with `bunx shadcn add table`, [then chatting with OpenCode](https://github.com/aaronjordan/a9n-dev/blob/main/demos/isomorphic-supabase-client/app/page.opencode.md?plain=1).
 
-<img alt="Screenshot of table component with recent orders" src="/notebook-media/260125-sb-table.png" />
+![Screenshot of table component with recent orders](../../media/260125-sb-table.png)
 
 I'll also create an editor to allow us to change details of an order that already exists. Similarly, [I'm throwing the task at OpenCode.](https://github.com/aaronjordan/a9n-dev/blob/main/demos/isomorphic-supabase-client/app/page-editor.opencode.md?plain=1)
 
-<img alt="Screenshot of order editor popup component" src="/notebook-media/260125-sb-editor.png" />
+![Screenshot of order editor popup component](../../media/260125-sb-editor.png)
 
 ### This is where it gets annoying 
 
