@@ -6,31 +6,33 @@ import tailwindcss from "@tailwindcss/vite";
 import { createCssVariablesTheme } from "shiki";
 import { rehypeGithubAlerts } from "rehype-github-alerts";
 import remarkGfm from "remark-gfm";
+import rehypeCodeGroups from "@repo/rehype-code-groups";
+import remarkCodeGroups from "@repo/remark-code-groups";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://a9n.dev",
-  integrations: [mdx()],
+	site: "https://a9n.dev",
+	integrations: [mdx()],
 
-  markdown: {
-    rehypePlugins: [rehypeGithubAlerts],
-    remarkPlugins: [remarkGfm],
-    shikiConfig: {
-      theme: createCssVariablesTheme({
-        name: "css-variables",
-        variablePrefix: "--code-",
-        fontStyle: true,
-      }),
-      wrap: false,
-    },
-  },
+	markdown: {
+		rehypePlugins: [rehypeGithubAlerts, rehypeCodeGroups],
+		remarkPlugins: [remarkGfm, remarkCodeGroups],
+		shikiConfig: {
+			theme: createCssVariablesTheme({
+				name: "css-variables",
+				variablePrefix: "--code-",
+				fontStyle: true,
+			}),
+			wrap: false,
+		},
+	},
 
-  vite: {
-    plugins: [tailwindcss()],
-    ssr: {
-      external: ["canvaskit-wasm"]
-    }
-  },
+	vite: {
+		plugins: [tailwindcss()],
+		ssr: {
+			external: ["canvaskit-wasm"],
+		},
+	},
 
-  adapter: cloudflare(),
+	adapter: cloudflare(),
 });
