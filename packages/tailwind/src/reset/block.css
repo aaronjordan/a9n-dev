@@ -1,132 +1,131 @@
 hr {
-  color: var(--frame-low);
+	color: var(--frame-low);
 }
 
 main ul:not(.u, .contains-task-list) {
-  list-style-type: disc;
-  margin-inline-start: --spacing(5);
-  margin-inline-end: --spacing(1);
+	list-style-type: disc;
+	margin-inline-start: --spacing(5);
+	margin-inline-end: --spacing(1);
 
-  & li {
-    padding-inline-start: --spacing(2);
-  }
+	& li {
+		padding-inline-start: --spacing(2);
+	}
 }
 
 ol {
-  margin-inline-start: --spacing(5);
-  margin-inline-end: --spacing(1);
-  list-style-type: decimal;
+	margin-inline-start: --spacing(5);
+	margin-inline-end: --spacing(1);
+	list-style-type: decimal;
 
-  & li {
-    padding-inline-start: --spacing(2);
-  }
+	& li {
+		padding-inline-start: --spacing(2);
+	}
 }
 
 ul:not(.u) li {
-  margin-top: --spacing(1);
+	margin-top: --spacing(1);
 
-  &:first-child {
-    margin-top: 0;
-  }
+	&:first-child {
+		margin-top: 0;
+	}
 }
 
 ul.contains-task-list .task-list-item input {
-  margin-inline-start: --spacing(3);
-  margin-inline-end: --spacing(4);
+	margin-inline-start: --spacing(3);
+	margin-inline-end: --spacing(4);
 }
 
 blockquote,
 .markdown-alert {
-  --accent: var(--frame-high);
-  border-inline-start: --spacing(1) solid var(--accent);
-  padding-inline-start: --spacing(4);
-  padding-block: --spacing(2);
-  border-top-right-radius: --spacing(2);
-  border-bottom-right-radius: --spacing(2);
-  background: var(--surface);
+	--accent: var(--frame-high);
+	border-inline-start: --spacing(1) solid var(--accent);
+	padding-inline-start: --spacing(4);
+	padding-block: --spacing(2);
+	border-top-right-radius: --spacing(2);
+	border-bottom-right-radius: --spacing(2);
+	background: var(--surface);
 }
 
 blockquote > p:not(:last-child) {
-  margin-bottom: --spacing(4);
+	margin-bottom: --spacing(4);
 }
 
 blockquote > footer {
-  /* not sure yet on this: */
-  /* text-align: right; */
-  color: var(--content-low);
-  &::before {
-    content: "—";
-    display: inline;
-    margin-right: --spacing(2);
-  }
+	/* not sure yet on this: */
+	/* text-align: right; */
+	color: var(--content-low);
+	&::before {
+		content: "—";
+		display: inline;
+		margin-right: --spacing(2);
+	}
 }
 
 blockquote > footer > cite {
-  font-style: normal;
+	font-style: normal;
 }
 
 .markdown-alert {
-  box-shadow:
-    0 6px 12px -6px #0003,
-    81px 0 54px -54px color-mix(in lch, var(--accent) 20%, transparent) inset;
-  padding-right: --spacing(2);
+	box-shadow:
+		0 6px 12px -6px #0003,
+		81px 0 54px -54px color-mix(in lch, var(--accent) 20%, transparent) inset;
+	padding-right: --spacing(2);
 
-  & > p:not(.markdown-alert-title, :last-child) {
-    margin-bottom: --spacing(2);
-  }
+	& > p:not(.markdown-alert-title, :last-child) {
+		margin-bottom: --spacing(2);
+	}
 }
 .markdown-alert-title {
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: --spacing(2);
-  font-weight: 600;
-  text-shadow: 0 0 24px color-mix(in lch, var(--accent) 20%, transparent);
+	color: var(--accent);
+	display: flex;
+	align-items: center;
+	gap: --spacing(2);
+	font-weight: 600;
 
-  & svg {
-    fill: var(--accent);
-  }
+	& svg {
+		fill: var(--accent);
+	}
 }
 
 .markdown-alert-note {
-  --accent: var(--blue);
+	--accent: var(--blue);
 }
 .markdown-alert-tip {
-  --accent: var(--green);
+	--accent: var(--green);
 }
 .markdown-alert-important {
-  --accent: var(--purple);
+	--accent: var(--purple);
 }
 .markdown-alert-warning {
-  --accent: var(--yellow);
+	--accent: var(--yellow);
 }
 .markdown-alert-caution {
-  --accent: var(--red);
+	--accent: var(--red);
 }
 
 pre {
-  --size: 0.925rem;
-  font-size: var(--size);
-  overflow-x: auto;
-  background-color: var(--surface);
-  padding-block: --spacing(4);
-  color: var(--content-low);
-  box-shadow:
-    0 1.25rem 4.25rem -0.75rem var(--surface-high) inset,
-    0 0.25rem 1.75rem -0.5rem var(--surface-high) inset;
-  line-height: 1.5;
+	--size: 0.925rem;
+	font-size: var(--size);
+	overflow-x: auto;
+	background-color: var(--surface);
+	padding-block: --spacing(4);
+	color: var(--content-low);
+	box-shadow:
+		0 1.25rem 4.25rem -0.75rem var(--surface-high) inset,
+		0 0.25rem 1.75rem -0.5rem var(--surface-high) inset;
+	line-height: 1.5;
 }
 
 /* Apply some resets for header elements */
 header ul {
-  display: flex;
-  gap: --spacing(2);
+	display: flex;
+	gap: --spacing(2);
 
-  & li {
-    margin: 0;
-  }
+	& li {
+		margin: 0;
+	}
 
-  & a {
-    text-decoration: none;
-  }
+	& a {
+		text-decoration: none;
+	}
 }

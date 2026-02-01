@@ -46,3 +46,41 @@ h6 {
 .footnotes li {
   margin-top: 12px;
 }
+
+html.light {
+    color-scheme: light;
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    html {
+        color-scheme: dark;
+    }
+}
+
+html {
+    overflow-y: hidden;
+}
+
+/*
+// This can disable the awkward zoom reveal of the out-of-bounds content,
+// but is a litte risky since images really require zoom to use...
+// A JS solution to snap back to 0 scroll on zoom out is maybe better??
+body {
+  touch-action: pan-y;
+}
+*/
+
+html::after {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    height: calc(110vh - 100%);
+    background: linear-gradient(45deg, var(--surface-high), var(--frame-low) 70%);
+    box-shadow: 0 9px 9px -9px var(--frame-high) inset;
+}

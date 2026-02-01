@@ -15,6 +15,7 @@
 
 [data-code-group] .cg-tab {
 	display: block;
+	position: relative;
 	padding: 6px 18px;
 	background: var(--surface);
 	min-width: max-content;
@@ -33,6 +34,11 @@
 	-webkit-appearance: none;
 	appearance: none;
 	outline: none;
+
+	/* ok without on desktop, but `appearance: none`
+	 * input still takes up space on mobile safari. */
+	position: absolute;
+	inset: 0;
 }
 
 [data-code-group] .cg-tab:has(input:focus-visible) {
