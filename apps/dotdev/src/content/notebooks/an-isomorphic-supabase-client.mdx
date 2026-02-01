@@ -79,8 +79,6 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgx
 After this initial creation, let's [add a table](https://supabase.com/docs/guides/local-development/declarative-database-schemas) and [seed some data](https://supabase.com/docs/guides/local-development/seeding-your-database) to work with.
 
 ```sql group title="supabase/schema/orders.sql"
--- supabase/schema/orders.sql
-
 create type size as enum ('small', 'medium', 'large');
 create type order_status as enum ('pending', 'completed', 'cancelled');
 
@@ -114,7 +112,6 @@ create table order_drinks (
 ```
 
 ```sql title="supabase/seed.sql"
--- supabase/seed.sql
 -- Insert drinks menu
 INSERT INTO drinks (name, base_price) VALUES
     ('Drip Coffee', 3.00),
@@ -214,7 +211,6 @@ To make it easy, let's add a script to `package.json`.
 Running it with `bun db:generate-types` will create a `ts` file we can hand off to our Supabase JS clients, which is trivial. Add the type import and generic argument to the neighboring client and server files from the `with-supabase` template.
 
 ```ts group title="lib/supabase/client.ts"
-// lib/supabase/client.ts
 import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "./db.types";
 
@@ -227,7 +223,6 @@ export function createClient() {
 ```
 
 ```ts title="lib/supabase/server.ts"
-// lib/supabase/server.ts
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "./db.types";

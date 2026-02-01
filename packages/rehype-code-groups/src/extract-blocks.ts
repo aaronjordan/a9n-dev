@@ -15,7 +15,9 @@ export function extractCodeBlocksAtIndex(
 	count: number,
 	parent: hast.Root | hast.Element,
 ): hast.Element[] {
-	return collect(index + 1, count, parent.children);
+	const all = collect(index + 1, count, parent.children);
+	tagCodeBlocks(all);
+	return all;
 }
 
 /**
@@ -36,6 +38,17 @@ function collect(
 		return [all.splice(i, 1)[0] as hast.Element, ...collect(i, c - 1, all)];
 	if (isWhitespace(all[i])) return collect(i + 1, c, all);
 	return [];
+}
+
+/**
+ * Tags the code blocks in `all` with their index.
+ *
+ * Could introduce a new recursive param to do this instead...might be cleaer.
+ */
+function tagCodeBlocks(all: hast.Element[]) {
+	for (let i = 0; i < all.length; i++) {
+		all[i].properties.dataCodeGroupId = i + 1;
+	}
 }
 
 function isCodeBlock(

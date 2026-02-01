@@ -2,6 +2,7 @@
 @import "@repo/tailwind/css";
 @import "@repo/colorbox/palettes/flexoki.css" layer(theme);
 @import "@repo/colorbox/maps/flexoki.css" layer(theme);
+@import "@repo/rehype-code-groups/css" layer(base);
 @plugin "@iconify/tailwind4" {
   scale: 1.1;
 }

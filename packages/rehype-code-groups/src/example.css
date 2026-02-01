@@ -1,0 +1,55 @@
+[data-code-group] {
+	display: flex;
+	flex-direction: column;
+}
+
+[data-code-group] > .cg-tabs {
+	display: flex;
+	max-width: 100%;
+	width: 100%;
+	overflow-x: scroll;
+	padding-inline: var(--spacing-gutter);
+	scrollbar-color: rgba(0, 0, 0, 0.5) var(--yellow);
+	scrollbar-width: thin;
+}
+
+[data-code-group] .cg-tab {
+	display: block;
+	padding: 6px 18px;
+	background: var(--surface);
+	min-width: max-content;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	box-shadow: 0 8px 12px -12px var(--frame-low) inset;
+}
+
+[data-code-group] .cg-tab:has(input:checked) {
+	background: var(--yellow);
+	color: var(--surface-low);
+}
+
+[data-code-group] input {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	outline: none;
+}
+
+[data-code-group] .cg-tab:has(input:focus-visible) {
+	text-decoration: underline;
+	text-decoration-style: wavy;
+}
+
+[data-code-group] > pre {
+	display: none;
+}
+[data-code-group]:has(input[value="1"]:checked) > pre[data-code-group-id="1"],
+[data-code-group]:has(input[value="2"]:checked) > pre[data-code-group-id="2"],
+[data-code-group]:has(input[value="3"]:checked) > pre[data-code-group-id="3"],
+[data-code-group]:has(input[value="4"]:checked) > pre[data-code-group-id="4"],
+[data-code-group]:has(input[value="5"]:checked) > pre[data-code-group-id="5"],
+[data-code-group]:has(input[value="6"]:checked) > pre[data-code-group-id="6"],
+[data-code-group]:has(input[value="7"]:checked) > pre[data-code-group-id="7"],
+[data-code-group]:has(input[value="8"]:checked) > pre[data-code-group-id="8"] {
+	display: block;
+}

@@ -9,7 +9,7 @@ import type * as hast from "hast";
 export function buildCodeGroupTabs(id: string, names: string[]): hast.Element {
 	return {
 		type: "element",
-		tagName: "fieldset",
+		tagName: "div",
 		properties: { class: "cg-tabs" },
 		children: [...build(id, names)],
 	};
@@ -33,12 +33,17 @@ function tab(id: string, key: number, name: string): hast.Element {
 	return {
 		type: "element",
 		tagName: "label",
-		properties: {},
+		properties: { class: "cg-tab" },
 		children: [
 			{
 				type: "element",
 				tagName: "input",
-				properties: { type: "radio", name: id, value: key.toString() },
+				properties: {
+					type: "radio",
+					checked: key === 1,
+					name: id,
+					value: key.toString(),
+				},
 				children: [],
 			},
 			{
