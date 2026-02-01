@@ -20,7 +20,7 @@ export const remarkCodeGroups: unified.Plugin<[], mdast.Root> = () => {
 	let appendName: undefined | ((name: string) => void);
 	let lastIndex = -1;
 
-	return (tree, file) => {
+	return (tree) => {
 		visit(tree, "code", (node, index, parent) => {
 			if (typeof index !== "number" || parent?.type !== "root") return;
 

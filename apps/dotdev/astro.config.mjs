@@ -15,7 +15,10 @@ export default defineConfig({
 	integrations: [mdx()],
 
 	markdown: {
-		rehypePlugins: [rehypeGithubAlerts, rehypeCodeGroups],
+		rehypePlugins: [
+			rehypeGithubAlerts,
+			[rehypeCodeGroups, { class: "lane-full" }],
+		],
 		remarkPlugins: [remarkGfm, remarkCodeGroups],
 		shikiConfig: {
 			theme: createCssVariablesTheme({

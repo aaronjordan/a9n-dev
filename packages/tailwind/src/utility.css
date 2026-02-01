@@ -60,7 +60,7 @@
     margin-top: --spacing(4);
   }
 
-  & > pre {
+  & > pre, & [data-code-group] pre {
     grid-column: margin-start / margin-end;
     padding-inline: var(--spacing-gutter);
   }
