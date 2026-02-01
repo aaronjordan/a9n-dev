@@ -15,6 +15,8 @@
 		"@fontsource/google-sans-code": "^5.2.1",
 		"@repo/colorbox": "workspace:*",
 		"@repo/tailwind": "workspace:*",
+		"@repo/rehype-code-groups": "workspace:*",
+		"@repo/remark-code-groups": "workspace:*",
 		"@tailwindcss/vite": "^4.1.12",
 		"astro": "^5.13.2",
 		"astro-og-canvas": "^0.7.2",

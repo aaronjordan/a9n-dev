@@ -1,0 +1,16 @@
+{
+	"name": "@repo/rehype-code-groups",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./css": "./src/example.css"
+	},
+	"dependencies": {
+		"unist-util-visit": "^5.1.0"
+	},
+	"devDependencies": {
+		"hast": "^1.0.0",
+		"unified": "^11.0.5"
+	}
+}
