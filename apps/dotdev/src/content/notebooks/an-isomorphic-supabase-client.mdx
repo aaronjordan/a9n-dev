@@ -342,8 +342,7 @@ I bet you see where this is going.
 
 I'd argue that the simplest way we can differentiate environments when selecting the `createClient` function to use is through runtime conditions. We can use the internal `#` syntax to import the Supabase client, rather than directly getting the implementation from `server.ts` or `client.ts`. **This is all you really need:**
 
-```jsonc
-// package.json
+```jsonc group title="package.json"
 {
   // ...
   "imports": {
