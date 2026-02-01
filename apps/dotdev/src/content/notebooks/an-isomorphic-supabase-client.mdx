@@ -6,7 +6,7 @@ subtitle: Part 2 of the dive into conditional exports
 
 import TableOfContents from "../../components/TableOfContents.astro";
 
-Piecing this all together, we can make [Supabase's JavaScript SDK](https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=package-manager&package-manager=npm&queryGroups=framework&framework=nextjs) easier to use with *any* fullstack framework where we need [support for client and server-side rendering.](https://developer.mozilla.org/en-US/docs/Glossary/SSR) Some platforms provide [their own environment-specific functions](https://tanstack.com/start/latest/docs/framework/react/guide/environment-functions#isomorphic-functions), but this solution works the same way **everywhere**. Of course, this is made possible through [runtime conditions, which we previously covered.](/notebooks/conditional-exports-are-magic)
+Piecing this all together, we can make [Supabase's JavaScript SDK](https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=package-manager&package-manager=npm&queryGroups=framework&framework=nextjs) easier to use with *any* fullstack framework where we need [support for client and server-side rendering.](https://developer.mozilla.org/en-US/docs/Glossary/SSR) Some platforms provide [their own environment-specific functions](https://tanstack.com/start/latest/docs/framework/react/guide/environment-functions#isomorphic-functions), but this solution works the same way **everywhere**. Of course, this is made possible through [runtime conditions, which we previously covered.](/notebook/conditional-exports-are-magic)
 
 Let's walk through an example of configuring the SDK for isomorphic usage in [Next.js](https://nextjs.org/docs), a platform that does not natively provide isomorphic bindings at the time of writing.
 
@@ -379,7 +379,7 @@ export async function createClient() {
 
 Afterward, go ahead and replace all the client imports throughout the project with this `#supabase` syntax. Consistency is good from the start, doubly so in an era of AI codegen. Whatever style you produce _will be amplified_ by agents as they contribute.
 
-Also, if you'd like stronger guarantees on consistency within your runtime-dependent packages, consider [this strategy from my previous post.](/notebooks/conditional-exports-are-magic#cool-but-what-about-typescript) You _can_ get TypeScript to check these import variants, but doing so can get a little convoluted.
+Also, if you'd like stronger guarantees on consistency within your runtime-dependent packages, consider [this strategy from my previous post.](/notebook/conditional-exports-are-magic#cool-but-what-about-typescript) You _can_ get TypeScript to check these import variants, but doing so can get a little convoluted.
 
 Should you work in a monorepo, you could even include this as part of a package's `exports`, which is more in line with what NPM packages you import are using to achieve similar effects. The relevant configuration in such a package is about the same, just under the public `exports` key rather than internal package `imports` as shown above.
 
